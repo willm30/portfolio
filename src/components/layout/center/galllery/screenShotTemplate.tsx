@@ -10,7 +10,6 @@ import { getOrder, isVideoThumbnail } from "../../../../utilities/images";
 export default function ScreenShotTemplate({ video, imgFull, imgThumbnail }) {
   const [displayModal, setDisplayModal] = useState(false);
   const [thumbnailIndex, setThumbnailIndex] = useState(1);
-  console.log(imgThumbnail, "imgthumb");
   function handleOpenModal(index) {
     setDisplayModal(true);
     handleThumbnailSelect(index);

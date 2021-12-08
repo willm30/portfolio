@@ -5,10 +5,9 @@ import WaitingPage from "../pageTemplates/waitingPage";
 import { FirstRenderContext } from "../context/firstRender";
 import { areFontsReady } from "../utilities/fonts";
 
-export default function Writing({ data, location }) {
+export default function Writing({ data, location, pageContext }) {
   const [isLoading, setIsLoading] = useState(true);
   const [firstRender] = useContext(FirstRenderContext);
-
   useEffect(() => {
     if (firstRender === null) {
       areFontsReady(setIsLoading);
@@ -16,7 +15,14 @@ export default function Writing({ data, location }) {
   }, []);
 
   if (firstRender === null && isLoading) return <WaitingPage />;
-  else return <PageTemplate blogPostData={data} location={location} />;
+  else
+    return (
+      <PageTemplate
+        blogPostData={data}
+        location={location}
+        pageContext={pageContext}
+      />
+    );
 }
 
 export const query = graphql`

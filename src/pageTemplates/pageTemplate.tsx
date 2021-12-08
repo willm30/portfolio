@@ -5,14 +5,16 @@ import Scaffold from "../components/layout/scaffold";
 export default function PageTemplate({
   blogPostData,
   location,
+  pageContext,
 }: {
   blogPostData: any;
+  pageContext: any;
   location: PageProps["location"];
 }) {
   const { frontmatter } = blogPostData.post;
   return (
     <Scaffold location={location} title={frontmatter.metaTitle}>
-      <CentrePiece location={location} blogPostData={blogPostData} />
+      <CentrePiece {...{ blogPostData, pageContext, location }} />
     </Scaffold>
   );
 }

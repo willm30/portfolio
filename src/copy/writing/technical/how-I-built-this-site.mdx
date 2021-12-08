@@ -101,19 +101,19 @@ This is a great plugin in my opinion, as it would be a real time investment to c
 
 With that said, the one downside is that you forfeit control over styling of the comment section, but this is a price I'm happy to pay for the convenience, and it means readers and interact with me more naturally than by leaving the site to send me an email.
 
-### Table Of contents
+### Table of Contents
 
 I wanted a TOC to appear beside my blog posts, and fortunately, this was made incredibly easy thanks to <code>gatsby-plugin-mdx</code>. It automatically puts markdown headings into an array as a object with the # link and the heading title, so you can just query for this data and map through it to produce a TOC.
 
 All I have to do is remember to add headings when writing in order that they appear in the TOC. That's it!
 
-### Post metadata
+### Post Metadata
 
 At the top of every post I wanted some metadata from my frontmatter to appear. This was also fairly straightforward thanks again to the mdx plugin. It automatically generates a word count and a time to read, and also allows you to format your dates however you like in your GraphQL query. 
 
 Then you can just query this data without having to configure it yourself. 
 
-## The animations
+## The Animations
 
 Ok, that's it for toys. The other major consideration I had when building the site was how to make page transitions feel smooth without become time-consuming or elaborate. I think I've managed to strike a nice balance with my animations, which only take 1 second out and 1 second in, but don't feel rushed due to the easing I've chosen.
 
@@ -123,7 +123,7 @@ I also call the animations inside <code>useLayoutEffect</code>, but to be honest
 
 Another thing I'm conscious of is when users navigate from a non-button click, i.e. directly to the url or via their browser history. In this case, I ensure that there's no animation either in or out, as I feel this would really impede the flow of the site if you had to sit through unwanted animations to get back to content you'd already viewed.
 
-My final thought on animating navigation in Gatsby concerns use of the navigation helper instead of the Gatsby <code>Link</code> component. If you want to read about how I managed to take advantage of Gatsby Link's preloading advantages while using the navigation helper for the actual navigation, check out my post on <WhiteLink url="/writing/technical/preloading-with-gatsby-navigate" pathname="writing/technical/how-i-built-this-site"/>Preloading with Gatsby Navigate<WhiteLink>.
+My final thought on animating navigation in Gatsby concerns use of the navigation helper instead of the Gatsby <code>Link</code> component. If you want to read about how I managed to take advantage of Gatsby Link's preloading advantages while using the navigation helper for the actual navigation, check out my post on <WhiteLink url="/writing/technical/preloading-with-gatsby-navigate" pathname="writing/technical/how-i-built-this-site">Preloading with Gatsby Navigate</WhiteLink>.
 
 ## Fonts and Fighting FOUT
 
@@ -135,5 +135,14 @@ To be extra safe, I implemented a loading icon that users see while text is gett
 
 A head scratcher for sure, but not one that warrants too much further investigation thanks to <a href="https://www.gatsbyjs.com/plugins/gatsby-omni-font-loader/">Gatsby Omni Font Loader</a>!
 
+## Closing Remarks
 
-The code for this site is <a href="" className="underline">public on Github</a>.
+And that's been a whirlwind tour of the site's creation. It's been about a week working on this full time, including the design, which may seem like a long time for a relatively simple blog, but I've had a fair amount of first-time experiences while creating it which I think explains the extra!
+
+It exists to serve as a blog and space to showcase other work I'm doing, and I'm really happy with how it's turned out so far. I love being able to just write something in mdx as soon as the idea strikes and know it's going to look exactly how I think it should with no extra effort.
+
+I'm not sure why, but I've always felt resistance to writing on commercial blogging platforms and it could be because I wanted my words to be enveloped in a layout that was also mine; i.e. I wanted control over not just the content, but the form too. 
+
+Well now I have that, so hopefully it'll lead to a lot more writing!
+
+The code for this site is <a href="https://github.com/willm30/portfolio">public on Github</a>. Please take a look if there's anything I've mentioned you'd like to replicate specifically, and leave me a comment if you'd like to know more about anything I've mentioned—or if you see rooom for improvement!

@@ -10,7 +10,6 @@ export function getCaption(image) {
 }
 
 export function getOrder(image) {
-  console.log(image, "image");
   const originalTitle = image.fixed.originalName;
   return Number(originalTitle.match(/[0-9]/)[0]);
 }

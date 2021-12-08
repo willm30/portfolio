@@ -10,6 +10,7 @@ export const bgLightHover = "hover:bg-gray-100";
 export const bgDark = "bg-gray-800";
 export const bgDarkHover = "hover:bg-gray-800";
 export const bgModal = "bg-gray-400 bg-opacity-50";
+export const highlight = `${bgLight} ${textDark}`;
 export const scrollBarThumbLight = "scrollbar-thumb-gray-100";
 export const scrollBarThumbDark = "scrollbar-thumb-gray-400";
 export const scrollBarThumbDarkHover = "hover:scrollbar-thumb-gray-400";

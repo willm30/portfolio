@@ -18,21 +18,22 @@ import {
   textBase,
   fontBase,
   borderLight,
-  scrollBarThumbLight,
-  scrollBarThumbDarkHover,
   scrollDefault,
 } from "../../../styles/common";
 import ContentTemplate from "./content/contentTemplate";
 import ScreenShotTemplate from "./galllery/screenShotTemplate";
 import TOC from "../../blog/tableOfContents/toc";
 import { useOverflowEffect } from "../../../utilities/hooks/checkOverflow";
+import FooterTemplate from "./content/footer/footer";
 
 export default function CentrePiece({
   blogPostData,
   location,
+  pageContext,
 }: {
   blogPostData: any;
   location: PageProps["location"];
+  pageContext: any;
 }) {
   const { pathname } = location;
   const [isTabNavigation, setIsTabNavigation] =
@@ -42,7 +43,7 @@ export default function CentrePiece({
   const { frontmatter, tableOfContents } = blogPostData.post;
   const { imgRegex } = frontmatter;
   const { items } = tableOfContents;
-
+  const { nextPost, previousPost } = pageContext;
   useLayoutEffect(() => {
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -133,6 +134,13 @@ export default function CentrePiece({
           className={`${styles.desktop.center} ${styles.mobile.center}`}
         >
           <ContentTemplate blogPost={blogPostData.post} pathname={pathname} />
+        </div>
+        <div id="center-footer" className="invisible">
+          <FooterTemplate
+            prev={previousPost}
+            next={nextPost}
+            pathname={pathname}
+          />
         </div>
       </div>
       <div

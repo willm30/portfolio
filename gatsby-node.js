@@ -7,13 +7,22 @@ exports.createPages = async ({ actions, graphql }) => {
   return graphql(
     `
       query WritingMdx {
-        allMdx {
+        all: allMdx(sort: { fields: frontmatter___date, order: DESC }) {
           nodes {
             id
             slug
             frontmatter {
               imgRegex
             }
+          }
+        }
+        writing: allMdx(
+          filter: { slug: { regex: "/writing//" } }
+          sort: { fields: frontmatter___date, order: DESC }
+        ) {
+          nodes {
+            id
+            slug
           }
         }
       }
@@ -23,19 +32,39 @@ exports.createPages = async ({ actions, graphql }) => {
       throw result.errors;
     }
 
-    // Create blog post pages.
-    console.log(result, "result");
-    result.data.allMdx.nodes.forEach((node) => {
-      console.log(node, "node");
+    const { nodes: allPosts } = result.data.all;
+    const { nodes: allWriting } = result.data.writing;
+    const allWritingIds = allWriting.map((n) => n.id);
+    const last = allWriting.length - 1;
+
+    function removeTrailingSlash(slug) {
+      const regex = /.*\/$/;
+      const path = regex.test(slug) ? slug.slice(0, -1) : slug;
+      return path;
+    }
+    allPosts.forEach((node) => {
       const { id, frontmatter, slug } = node;
       const { imgRegex } = frontmatter;
+      const index = allWritingIds.indexOf(id);
+      const path = removeTrailingSlash(slug);
       createPage({
-        // Path for this page — required
-        path: `/${slug}`,
+        path: `/${path}`,
         component: blogPostTemplate,
         context: {
           id,
           imgRegex: `/${imgRegex}/`,
+          nextPost:
+            index > -1
+              ? index > 0
+                ? removeTrailingSlash(allWriting[index - 1].slug)
+                : ""
+              : "",
+          previousPost:
+            index > -1
+              ? index < last
+                ? removeTrailingSlash(allWriting[index + 1].slug)
+                : ""
+              : "",
         },
       });
     });
