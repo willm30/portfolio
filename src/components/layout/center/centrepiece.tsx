@@ -44,18 +44,21 @@ export default function CentrePiece({
   const { imgRegex } = frontmatter;
   const { items } = tableOfContents;
   const { nextPost, previousPost } = pageContext;
+  const isBrowser = typeof window != "undefined";
+
   useLayoutEffect(() => {
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+    let reducedMotion;
+
+    if (isBrowser)
+      reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
     if (!reducedMotion) {
       if (firstRender === null && pathname == "/") {
         handleFirstRender();
         if (window.innerWidth < 768) {
-          console.log("Mobile");
           openingAnimationMobile();
         } else {
-          console.log("Desktop");
           openingAnimation();
         }
       } else {

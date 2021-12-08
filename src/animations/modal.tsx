@@ -33,7 +33,8 @@ function navigateIn(tl, target) {
   return tl
     .set(target, {
       y: function (_, target) {
-        const windowHeight = window.innerHeight;
+        const windowHeight =
+          typeof window != "undefined" ? window.innerHeight : null;
         const targetY = target.getBoundingClientRect().y;
         return windowHeight - targetY;
       },
@@ -49,7 +50,8 @@ function navigateIn(tl, target) {
 export function modalExit(target, onComplete, onCompleteParams) {
   return gsap.to(target, {
     y: function (_, target) {
-      const windowHeight = window.innerHeight;
+      const windowHeight =
+        typeof window != "undefined" ? window.innerHeight : null;
       const targetY = target.getBoundingClientRect().y;
       return windowHeight - targetY;
     },

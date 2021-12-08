@@ -1,8 +1,12 @@
 import { navigate } from "gatsby";
 import gsap from "gsap";
 
+const isBrowser = typeof document != "undefined";
+
 export function navigateOut(tl, target, url) {
-  const centerFooter = document.getElementById("center-footer");
+  let centerFooter;
+
+  if (isBrowser) centerFooter = document.getElementById("center-footer");
 
   return tl
     .to(target, {
@@ -30,12 +34,15 @@ export function navigateOut(tl, target, url) {
 }
 
 export function navigateIn(tl, target) {
-  const centerFooter = document.getElementById("center-footer");
+  let centerFooter;
+
+  if (isBrowser) centerFooter = document.getElementById("center-footer");
 
   return tl
     .set([...target, centerFooter], {
       y: function (_, target) {
-        const windowHeight = window.innerHeight;
+        const windowHeight =
+          typeof window != "undefined" ? window.innerHeight : null;
         const targetY = target.getBoundingClientRect().y;
         return windowHeight - targetY;
       },
@@ -59,9 +66,13 @@ export function navigateIn(tl, target) {
 }
 
 export function centerIn() {
-  const centerCont = document.getElementById("center-container");
-  const centerRight = document.getElementById("center-right");
-  const centerLeft = document.getElementById("center-left");
+  let centerCont, centerRight, centerLeft;
+
+  if (isBrowser) {
+    centerLeft = document.getElementById("center-container");
+    centerRight = document.getElementById("center-right");
+    centerLeft = document.getElementById("center-left");
+  }
 
   const tl = gsap.timeline();
   navigateIn(tl, [centerCont, centerRight, centerLeft]);
@@ -75,19 +86,27 @@ function setVisible(target) {
 }
 
 export function centerOut(url) {
-  const centerCont = document.getElementById("center-container");
-  const centerRight = document.getElementById("center-right");
-  const centerLeft = document.getElementById("center-left");
+  let centerCont, centerRight, centerLeft;
+
+  if (isBrowser) {
+    centerLeft = document.getElementById("center-container");
+    centerRight = document.getElementById("center-right");
+    centerLeft = document.getElementById("center-left");
+  }
 
   const tl = gsap.timeline();
   navigateOut(tl, [centerCont, centerRight, centerLeft], url);
 }
 
 export function centerOn() {
-  const centerCont = document.getElementById("center-container");
-  const centerRight = document.getElementById("center-right");
-  const centerLeft = document.getElementById("center-left");
-  const centerFooter = document.getElementById("center-footer");
+  let centerCont, centerRight, centerLeft, centerFooter;
+
+  if (isBrowser) {
+    centerLeft = document.getElementById("center-container");
+    centerRight = document.getElementById("center-right");
+    centerLeft = document.getElementById("center-left");
+    centerFooter = document.getElementById("center-footer");
+  }
 
   setVisible([centerCont, centerRight, centerLeft, centerFooter]);
 }
