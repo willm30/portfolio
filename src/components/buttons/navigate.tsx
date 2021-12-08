@@ -5,11 +5,16 @@ import { TabNavigationContext } from "../../context/tabNavigation";
 
 export default function NavigateButton({ children, url, pathname, className }) {
   const [, setIsTabNavigation] = useContext(TabNavigationContext);
-  const reducedMotion =
-    typeof window != "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const isBrowser = typeof window != "undefined";
 
   function handleClick() {
+    let reducedMotion;
+
+    if (isBrowser)
+      reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
     if (pathname != url) {
       if (!reducedMotion) {
         setIsTabNavigation(true);
