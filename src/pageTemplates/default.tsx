@@ -26,7 +26,20 @@ export default function Writing({ data, location, pageContext }) {
 }
 
 export const query = graphql`
-  query Blogs($id: String!, $imgRegex: String!) {
+  query Blogs($id: String!) {
+    post: mdx(id: { eq: $id }) {
+      body
+      id
+      frontmatter {
+        date(formatString: "DD MMMM YYYY")
+        title
+      }
+    }
+  }
+`;
+
+/*
+query Blogs($id: String!, $imgRegex: String!) {
     post: mdx(id: { eq: $id }) {
       body
       id
@@ -65,4 +78,4 @@ export const query = graphql`
       }
     }
   }
-`;
+*/
