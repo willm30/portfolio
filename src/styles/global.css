@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  .list-arr::before {
+    content: "\2192";
+    padding-right: 5px;
+  }
+
+  .smooth-scroll {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    counter-reset: ordered;                       
+  }
+  
+  .list-ordered::before {
+    counter-increment: ordered;                 
+    content: counter(ordered) ". ";    
+  }
+  
+} 
+

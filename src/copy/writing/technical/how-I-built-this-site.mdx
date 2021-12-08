@@ -1,0 +1,139 @@
+---
+titleLink: "/writing/technical/how-i-built-this-site"
+title: "How I Built My Personal Website"
+metaTitle: "How I Built This Site"
+imgRegex: "thisSite"
+videoLink: ""
+date: 2021-12-08
+---
+
+import WhiteLink from "../../../components/blog/whiteLink"
+
+There are three main technologies I love working with, and this site was no different: Gatsby (React), Tailwind, and GSAP. For a more in-depth dicussion of why I use each, check out my post on <WhiteLink url="/writing/technical/new-project" pathname="/writing/technical/how-i-built-this-site">starting a new project</WhiteLink>.
+
+To get started, I created a new repo with <code>Gatsby new</code> (using Gatsby's CLI) and installed TailwindCSS. I also installed Typescript, Prettier and ESLint to help with code accuracy and style.
+
+## Laying It Out
+
+I'd created a rough sketch in Photoshop of what I was going for (which, as you can see from the gallery, was experimental at best and terrible at worst), and so I jumped straight in by getting the structure set up using CSS Grid. 
+
+I created a Layout component that split the site into three columns. The first contains the left-hand-side navigation, the second the content, and the third the right-hand-side navigation. 
+
+For the central column, I nested a second grid with the same dimensions, and in the centre of that I build my content template. 
+
+## The Content
+
+My content template consists of a number of smaller component templates. I have a title template, a body template, a gallery template, and a table of contents template. For the text itself, I'm using local mdx files and querying for them in my page template. 
+
+I really like using Mdx as it combines the benefits of Markdown and its plugin ecosystem (such as autolinking headers) with JSX components, which means I have a far greater ability to customise the visual and functional utility of my content than I would have otherwise.  
+
+I had also already used up my single free Contentful space on another project, and so instead of getting set up on another CMS, I just decided to use the <code>gatsby-source-filesystem</code> plugin to source my content locally. This had some *interesting* implications for image sourcing, which I'll get to later.
+ 
+Since every page is layed out in the same way, I only need one page template, which queries for the file ID passed in as the page gets created with Gatsby's dynamic routing API. I could have also set this up myself in the gatsby-node.js file, but there is literally no point given that the {Query.somequery} filename syntax does this automatically.
+
+I do shift the central layout slightly depending on whether or not the gallery or table of contents is present, which ensures it's always taking up the right amount of space; but that besides, it's essentially the same structure as the general page scaffold. 
+
+## The Widgets
+
+I wanted a few toys in my site, some of which I've built by hand and some I've simply imported from a third party. 
+
+### The Gallery
+
+I wanted an image gallery that appeared as a modal, so I wasn't restricted to showing any relevant images inline in the content body. I had to look up how to implement modals in Gatsby, because you can't simply add a portal <code>div</code> alongside your root <code>div</code>. 
+
+Fortunately, <code>gatsby-plugin-portal</code> does exactly that, so you can then build a portal component that appends a div to your portal root, which can be loaded from anywhere in your project (in my case, from inside the content template).
+
+The gallery component itself consistents of two containers aligned vertically, one for the display image and one below for all the image thumbnails. The largest image number I've tested so far is 5, and so haven't yet implemented some sort of scrolling function for the thumbnail images—but if I need to, I'll certainly get round to it. 
+
+I added some keyboard arrow listeners so you can flick through the images nice and easily, and added my <code>navigate in</code> animation so you don't feel assaulted when the modal appears. So far, so good...
+
+### Sourcing Images Locally (Not Easy!)
+
+While this is a fairly simple component to build, I nevertheless had some head-scratching data-related problems I had to resolve, all of which stemmed from my decision to use the local filesystem instead of a headless CMS to source my content. 
+
+With a headless CMS such as Contentful, you upload all your related content, and it gets fed into Gatsby as a JSON in which all related data is in one place: e.g. the post's title, the post's content, and the post's images. Plus, when using something like Contentful, the Gatsby plugin automatically handles image processing, so you can take advantage of Gatsby's built-in image optimisation features.
+
+With the local filesystem, none of this is true. This means that when querying for my .mdx file, I had no way of querying simulatenously for the images associated with that file (because they don't live together in something like a JSON file).
+
+You could try and create a local CMS-style JSON folder describing all the data you want to query for, but you'd then have no way, without writing a custom plugin, of getting your Gatsby-optimised images (since you'd only be querying for the filepath strings and not the data that is outputted from the image API).
+
+I put the thought of writing a custom image-optimisation plugin on the bucket list, and instead decided to get a little bit clever.
+
+#### Attempt 1: Pure hack
+
+Because originally, I was using the Gatsby's dynamic page creator API, which looks for file names wrapped in curly braces and then uses the query path inside those braces to generate a filename, I didn't have access to my page's page context.
+
+This meant that in my page query, the only variable I could access was the id, and given I was creating pages from a file called <code>{Mdx.slug}.tsx</code>, that meant I could only query for specific mdx files and not for specific images.
+
+What I had to do was, in the gallery component itself, as opposed to the page template, run a static query for *all* images generated by the <code>gatsby-plugin-image</code> and <code>gatsby-plugin-sharp/transformer-sharp</code> plugins. 
+
+Then, using a regex I included in my mdx frontmatter, I filtered the gallery component for only the images relevant to the post. 
+
+Very ugly!
+
+#### Attempt 2: Much nicer
+
+Filtering on the client adds needless work for the browser at runtime if it's the case that the filtering could have been done at build time—which, I discovered when writing this very post, it could!
+
+I decided create a <code>gatsby-node.js</code> file and use the createPages API myself. This way I can query for allMdx files and pass in the regex as pageContext, and then instead of querying for images in the gallery component, I can run a page query from my page template that uses the regex as a filter.
+
+I can then pass all the relevant data down from a single source, instead of querying once at the page level and again at the component level. It also means I'm only passing down relevant data and can do away with the work of filtering images inside the gallery component.
+
+This solution came to me as I was writing this post. It's nicer than my original solution, and arguably nice enough to render the writing of a custom CMS-style plugin a waste of time. 
+
+The only slight constraint of doing it this way is that my image file names must be written according to a convention order in order for the regex to work, and I need to include a regex in all posts that have images (or an empty string in those that don't).
+
+My image names currently look like, e.g. 1.IndividualPicture_purpleOrchard. The number is the order I'd like the image to appear in (more on this in a moment), the substring before the underscore is the image caption that I parse in my gallery component, and the final substring is the regex.
+
+This is a slightly hackier way of defining all relevant metadata inside a JSON, but works for me and is certainly a simpler solution.
+
+#### Solving the Ordering Problem
+
+Another trouble I faced was getting my images to render in the order I wanted. Either GraphQL was rendering them out of source order, or as part of my original filtering process, I was rejigging them. 
+
+Either way, a guaranteed solution was to put the images inside a flex container and give them an order style property. This is why I put a number at the start of the image's filename, since it gets used as the order value and guarantees that my images will show up in the order I expect.
+
+### Comments
+
+For comments, I used <code>gatsby-plugin-disqus</code>, which was *much* easier to install than I had anticipated. The plugin is well documented in the Gatsby docs, and I virtually just copied over the example code and it worked. I went into my Disqus settings to change the way the comment count renders (I wanted just the number of comments, without the additional "comments" it appends by default), and that besides did absolutely nothing.
+
+This is a great plugin in my opinion, as it would be a real time investment to code a comment app yourself. This took about 15 minutes and means I don't have to worry about a server or database for my comments.
+
+With that said, the one downside is that you forfeit control over styling of the comment section, but this is a price I'm happy to pay for the convenience, and it means readers and interact with me more naturally than by leaving the site to send me an email.
+
+### Table Of contents
+
+I wanted a TOC to appear beside my blog posts, and fortunately, this was made incredibly easy thanks to <code>gatsby-plugin-mdx</code>. It automatically puts markdown headings into an array as a object with the # link and the heading title, so you can just query for this data and map through it to produce a TOC.
+
+All I have to do is remember to add headings when writing in order that they appear in the TOC. That's it!
+
+### Post metadata
+
+At the top of every post I wanted some metadata from my frontmatter to appear. This was also fairly straightforward thanks again to the mdx plugin. It automatically generates a word count and a time to read, and also allows you to format your dates however you like in your GraphQL query. 
+
+Then you can just query this data without having to configure it yourself. 
+
+## The animations
+
+Ok, that's it for toys. The other major consideration I had when building the site was how to make page transitions feel smooth without become time-consuming or elaborate. I think I've managed to strike a nice balance with my animations, which only take 1 second out and 1 second in, but don't feel rushed due to the easing I've chosen.
+
+In order to tackle flashes of unstyled content (FOUC), I have set all animated components by default to invisible. Then, with GSAP, I set their starting values to just out of view, and then use a tween to both restore their visibility and move them to their final positions. 
+
+I also call the animations inside <code>useLayoutEffect</code>, but to be honest I think the first measure by itself is sufficient.
+
+Another thing I'm conscious of is when users navigate from a non-button click, i.e. directly to the url or via their browser history. In this case, I ensure that there's no animation either in or out, as I feel this would really impede the flow of the site if you had to sit through unwanted animations to get back to content you'd already viewed.
+
+My final thought on animating navigation in Gatsby concerns use of the navigation helper instead of the Gatsby <code>Link</code> component. If you want to read about how I managed to take advantage of Gatsby Link's preloading advantages while using the navigation helper for the actual navigation, check out my post on <WhiteLink url="/writing/technical/preloading-with-gatsby-navigate" pathname="writing/technical/how-i-built-this-site"/>Preloading with Gatsby Navigate<WhiteLink>.
+
+## Fonts and Fighting FOUT
+
+Like flashes of unstyled content, I was noticing flashes of unstyled text when first loading my site's opening animation. It was *really* bugging me, and I couldn't figure out what was happening until I found <a href="https://css-tricks.com/how-to-load-fonts-in-a-way-that-fights-fout-and-makes-lighthouse-happy/">Adrian Bece's CSS Tricks article on FOUT.</a>
+
+This man will possibly never know how much joy he brought into my life when I saw he'd made a Gatsby plugin solving this exact problem, but about 5 minutes after installing Gatsby Omni Font Loader, my problem had been solved and I wasn't getting the same jarring flash of unstyled text I had been originally. 
+
+To be extra safe, I implemented a loading icon that users see while text is getting ready. To do this, I use the <a href="https://developer.mozilla.org/en-US/docs/Web/API/FontFaceSet">FontFace API</a> that is exposed on the document object, and only run my opening animation once the ready method returns true. You might see this flash for about half a second, but once it's ready, there's not FOUT, which I was getting before installing Adrian's Omnifont plugin, even though the API was telling me my fonts were ready.
+
+A head scratcher for sure, but not one that warrants too much further investigation thanks to <a href="https://www.gatsbyjs.com/plugins/gatsby-omni-font-loader/">Gatsby Omni Font Loader</a>!
+
+
+The code for this site is <a href="" className="underline">public on Github</a>.
