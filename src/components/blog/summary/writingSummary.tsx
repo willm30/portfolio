@@ -1,9 +1,7 @@
 import React from "react";
 import Summary from "./summary";
-import { useAllWritingPosts } from "../../../utilities/hooks/allWriting";
 import { graphql, useStaticQuery } from "gatsby";
 
-/*
 export default function WritingSummary() {
   const { allMdx } = useStaticQuery(
     graphql`
@@ -32,4 +30,3 @@ export default function WritingSummary() {
 
   return <Summary data={allPosts} pathname="/writing" className="" />;
 }
-*/
