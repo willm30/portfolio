@@ -9,6 +9,7 @@ import {
   textSm,
 } from "../../../styles/common";
 import { useOverflowEffect } from "../../../utilities/hooks/checkOverflow";
+import TableEntry from "./tableEntry";
 
 export default function TOC({ items }) {
   const [hasOverflowed, setHasOverflowed] = useState(false);
@@ -20,15 +21,15 @@ export default function TOC({ items }) {
   useEffect(() => {
     const options = {
       root: document.getElementById("center-container"),
-      rootMargin: "0px",
+      rootMargin: "0px 0px -30% 0px",
       threshold: 1.0,
     };
 
     const callback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting && isBrowser) {
-          history.pushState(null, null, `#${entry.target.id}`);
-          setIntersecting(entry);
+          history.pushState(null, document.title, `#${entry.target.id}`);
+          setIntersecting(entry); // forces re-render
         }
       });
     };
@@ -49,22 +50,19 @@ export default function TOC({ items }) {
       } ${scrollDefault}`}
     >
       <h2 className={`${bgLight} ${textDark} mt-4`}>Contents</h2>
-      <ul className="">
+      <ul>
         {items.map((i) => {
-          const bgColor = isBrowser
-            ? window.location.hash == i.url
-              ? `${highlight}`
-              : ""
-            : "";
+          let bgColor = "";
+
+          if (isBrowser && window.location.hash == i.url)
+            bgColor = `${highlight}`;
+
           return (
-            <li
-              className={`list-arr list-none ${bgColor} ${invertBaseColorsHover} ${textSm} my-4 pl-4 pr-2`}
-              key={i.title}
-            >
-              <a href={i.url} onClick={() => handleClick(i.url)}>
-                {i.title}
-              </a>
-            </li>
+            <TableEntry
+              item={i}
+              bgColor={bgColor}
+              onClick={() => handleClick(i.url)}
+            />
           );
         })}
       </ul>

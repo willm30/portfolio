@@ -1,0 +1,52 @@
+---
+title: "How I Set Up An Intersection Observer On My Blog"
+titleLink: "https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API"
+metaTitle: "Intersection Observer"
+imgRegex: "intersectionObserver"
+videoLink: ""
+date: 2021-12-09
+---
+
+When building the blog functionality of my website, I wanted the table of contents to automatically show the reader's progress through the article. 
+
+I'd already set it up to highlight a list item that had been clicked on by checking if the link's href matched the hash in the url (exposed by <code>window.location.hash</code>), but I wanted it to update itself as the reader moved through the article. I felt it would look strange if the reader clicked on a link to a section of the post, then moved down two sections and the contents was still showing them on the link they clicked to originally. 
+
+## The Intersection Observer API
+
+Modern browsers expose an overwhelming number of <a href="https://developer.mozilla.org/en-US/docs/Web/API">Web APIs</a>, of which the Intersection Observer is just one—but one that was absolutely perfect for my use case. 
+
+What an observer will do is give you data about the relationship between a root container and a target object, and specifically, it will tell you if they are intersecting. 
+
+Let's imagine you have a scrollable container, inside which you have some text (a blog post, say). What an observer allows you to do is initiate a callback function when some part of your blog post (a heading, for example) *intersects* its container—or, in other words, becomes visible. 
+
+In my case, when an <code>h2</code> becomes visible, or intersects the article container, I call a function that sets the url hash to that of the heading, and then I force a re-render of my Table of Contents component. 
+
+My contents component can then check which list item has a url that matches the location hash, and update its background and text colour accordingly.
+
+## The History API
+
+There's a hidden trick to the aforementioned, which is that if you simply try to set the hash using <code>window.location.hash = "heading1"</code>, it will trigger the browser to jump to that section of the article, *as if* the heading anchor had been clicked. 
+
+But I didn't want this, because I wanted everything to happen silently in the background. I just want the reader to be able to scroll through the article and have the contents table update automatically; if every time a heading came into view the window snapped that heading to the top of the container, it would lead to a very frustrating viewing experience.
+
+To get around this behaviour, I instead used the History API to set the hash. The History API also exposes the browser URL input, but allows you to set it silently, as I wanted.  
+
+To do this, you can call <code>history.pushState(state, title [, url])</code>, where state is the state associated with the new entry you're making onto the history stack, title is the title of that entry, and url is the associated url. 
+
+For me, state wasn't important as I only wanted to change the url, and title is, at the time of writing, an unimplemented feature in modern browsers, so I simply passed <code>null, document.title, `#${my-link-url}`</code> and fired the method every time an h2 comes into view. 
+
+## Setting The Margin
+
+With this, I was nearly finished, although I did notice one small problem: what if there were two headings visible simultaneously? I noticed this happening because the observer fires as soon as the target becomes visible (which you can specify as a percentage represented as a number between 0 and 1). Because I'm scrolling top to bottom, as soon as a heading peaked its nose into the container, the callback would fire, even if another heading was still visible at the top of the container.
+
+To combat this, you can set a rootMargin, which essentially alters the dimensions of the container. This came in handy, because I was able to push up the bottom of the rootContainer by 50% of the width of its actual bounding rectangle, which means once becoming visible my heading still has to travel roughly halfway up the container before the intersection event fires.
+
+To do this, I set the rootMargin property in the options object to: <code>"0px 0px -50% 0px"</code>. This pushes the bottom of my container's intersection boundary up by 50% of the container's width.
+
+## Closing Remarks
+
+And that's it really. See the gallery for the final code segments. I set the observer up inside useEffect and arbitrarily call a useState update function in order to trigger a render, which is what prompts my table of contents to check whether any of its entries share a url with the hash in the window's url. 
+
+Anything I could clarify? Leave me a comment. 
+
+P.S. I've since changed the margin from -50% to -30% as it wasn't catching the final header in some posts where I haven't written enough. Ultimately it's an art to finetune the margins exactly, but this seems to work for me for now.

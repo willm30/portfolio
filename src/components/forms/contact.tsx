@@ -4,6 +4,7 @@ import {
   bgLight,
   borderLight,
   buttonBase,
+  highlight,
   textDark,
 } from "../../styles/common";
 
@@ -29,12 +30,8 @@ export default function Contact({ email }) {
 
   return (
     <div>
-      <div
-        className={`${
-          open ? "hidden" : ""
-        } flex flex-col items-center ${borderLight} border-2`}
-      >
-        <span className="p-4 md:p-2 text-center">
+      <div className={`${open ? "hidden" : ""} flex flex-col items-center `}>
+        <span className={`p-4 md:p-2 text-center ${highlight}`}>
           Please confirm that you are not a robot trying to harvest and sell my
           email address.
         </span>
