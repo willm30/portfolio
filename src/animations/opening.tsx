@@ -33,6 +33,7 @@ export function openingAnimation() {
       [left, right],
       {
         xPercent: 0,
+        visibility: "visible",
         duration: 1,
         ease: "power1.inOut",
         onComplete: delayIn,

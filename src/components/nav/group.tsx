@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { FirstRenderContext } from "../../context/firstRender";
 import Heading from "./heading";
 
 export default function Group({
@@ -10,10 +11,12 @@ export default function Group({
   titles: string[];
   pathname: string;
 }) {
+  const [firstRender] = useContext(FirstRenderContext);
+  const vis = firstRender === null ? "invisible" : "";
   return (
     <div
       id={`${left ? "left" : "right"}-group`}
-      className={`flex flex-col justify-end ${left ? "" : "items-end"}`}
+      className={`${vis} flex flex-col justify-end ${left ? "" : "items-end"}`}
     >
       {titles.map((t) => (
         <Heading title={t} pathname={pathname} key={t} />
