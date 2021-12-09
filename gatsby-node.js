@@ -2,7 +2,7 @@ const path = require("path"); // eslint-disable-line
 
 exports.createPages = async ({ actions, graphql }) => {
   const { createPage } = actions;
-  const blogPostTemplate = path.resolve(`src/pageTemplates/default.tsx`);
+  const dummy = path.resolve(`src/pageTemplates/dummy.tsx`);
 
   return graphql(
     `
@@ -32,7 +32,7 @@ exports.createPages = async ({ actions, graphql }) => {
       const path = removeTrailingSlash(slug);
       createPage({
         path: `/${path}`,
-        component: blogPostTemplate,
+        component: dummy,
         context: {
           id,
         },

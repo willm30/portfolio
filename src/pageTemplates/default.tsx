@@ -14,15 +14,15 @@ export default function Writing({ data, location, pageContext }) {
     }
   }, []);
 
-  if (firstRender === null && isLoading) return <WaitingPage />;
-  else
-    return (
-      <PageTemplate
-        blogPostData={data}
-        location={location}
-        pageContext={pageContext}
-      />
-    );
+  //if (firstRender === null && isLoading) return <WaitingPage />;
+
+  return (
+    <PageTemplate
+      blogPostData={data}
+      location={location}
+      pageContext={pageContext}
+    />
+  );
 }
 
 export const query = graphql`
