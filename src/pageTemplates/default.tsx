@@ -2,19 +2,19 @@ import { graphql } from "gatsby";
 import React, { useContext, useEffect, useState } from "react";
 import PageTemplate from "../pageTemplates/pageTemplate";
 import WaitingPage from "../pageTemplates/waitingPage";
-// import { FirstRenderContext } from "../context/firstRender";
+import { FirstRenderContext } from "../context/firstRender";
 import { areFontsReady } from "../utilities/fonts";
 
 export default function Writing({ data, location, pageContext }) {
   const [isLoading, setIsLoading] = useState(true);
-  // const [firstRender] = useContext(FirstRenderContext);
+  const [firstRender] = useContext(FirstRenderContext);
   useEffect(() => {
-    if (/*firstRender === null*/ true) {
+    if (firstRender === null) {
       areFontsReady(setIsLoading);
     }
   }, []);
 
-  if (/*firstRender === null &&*/ isLoading) return <WaitingPage />;
+  if (firstRender === null && isLoading) return <WaitingPage />;
   else
     return (
       <PageTemplate
