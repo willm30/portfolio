@@ -10,7 +10,7 @@ module.exports = {
     extend: {
       gridTemplateColumns: {
         index: "1fr 0fr 1fr",
-        scaffold: "1fr 3fr 1fr",
+        scaffold: "1fr 4fr 1fr",
         centre: "1fr 4fr 1fr",
         centre2L: "1fr 5fr 0.5fr",
         centre2R: "0.5fr 5fr 1fr",

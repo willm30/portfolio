@@ -1,4 +1,3 @@
-/*
 import { useStaticQuery, graphql } from "gatsby";
 export function useAllWritingPosts() {
   const { allMdx } = useStaticQuery(
@@ -24,4 +23,3 @@ export function useAllWritingPosts() {
   );
   return allMdx;
 }
-*/

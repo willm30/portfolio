@@ -7,7 +7,9 @@ import {
 
 export default function SpanRev({ children }) {
   return (
-    <span className={`${revertBaseColorsHover} ${bgLight} ${textDark}`}>
+    <span
+      className={`transition-colors ${revertBaseColorsHover} ${bgLight} ${textDark}`}
+    >
       {children}
     </span>
   );

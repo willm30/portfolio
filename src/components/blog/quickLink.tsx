@@ -2,7 +2,7 @@ import React from "react";
 import NavigateButton from "../buttons/navigate";
 import Span from "./elements/span";
 
-export default function QuickLink() {
+export default function QuickLink({ children }) {
   return (
     <p className="flex justify-center items-center my-4">
       <span className="pr-1">&rarr;</span>
@@ -11,7 +11,7 @@ export default function QuickLink() {
         pathname="/work"
         className="underline"
       >
-        <Span>If you're looking for my portfolio</Span>
+        <Span>{children}</Span>
       </NavigateButton>{" "}
       <span className="pl-1">👀</span>
     </p>

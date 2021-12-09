@@ -111,6 +111,5 @@ export function centerOn() {
     centerFooter = document.getElementById("center-footer");
   }
 
-  console.log(isBrowser, centerCont, centerRight, centerLeft, centerFooter);
   setVisible([centerCont, centerRight, centerLeft, centerFooter]);
 }

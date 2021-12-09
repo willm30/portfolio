@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReCaptcha from "@pittica/gatsby-plugin-recaptcha";
 import {
-  bgDark,
   bgLight,
   borderLight,
   buttonBase,
   textDark,
-  textLight,
 } from "../../styles/common";
 
 export default function Contact({ email }) {

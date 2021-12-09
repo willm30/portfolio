@@ -8,7 +8,7 @@ export default function Initial({ initial, location }) {
     <NavigateButton url="/" pathname={pathname} className="hidden md:block">
       <div
         className={`flex justify-center mt-8 ${textLight} ${fontBold}`}
-        style={{ fontSize: "clamp(4rem, 10vw, 8rem)" }}
+        style={{ fontSize: "clamp(4rem, 10vw, 6rem)" }}
       >
         <span id={`${initial}-initial`} className="">
           {initial}

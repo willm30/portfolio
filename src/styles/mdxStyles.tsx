@@ -3,11 +3,10 @@ import React from "react";
 
 export const mdxStyles = {
   p: (props) => <p {...props} className="my-4" />,
-  code: (props) => <code {...props} className={`${highlight}`} />,
   h2: (props) => (
     <h2
       {...props}
-      className={`${textLarge} ${highlight} flex w-max font-bold my-1`}
+      className={`observable ${textLarge} ${highlight} flex w-max font-bold my-1`}
     />
   ),
   h3: (props) => (
