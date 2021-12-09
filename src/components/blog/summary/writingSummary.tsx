@@ -16,7 +16,6 @@ export default function WritingSummary() {
             timeToRead
             frontmatter {
               title
-              titleLink
               date(formatString: "DD MMMM YYYY")
             }
           }
