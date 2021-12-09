@@ -69,7 +69,7 @@ export function centerIn() {
   let centerCont, centerRight, centerLeft;
 
   if (isBrowser) {
-    centerLeft = document.getElementById("center-container");
+    centerCont = document.getElementById("center-container");
     centerRight = document.getElementById("center-right");
     centerLeft = document.getElementById("center-left");
   }
@@ -89,7 +89,7 @@ export function centerOut(url) {
   let centerCont, centerRight, centerLeft;
 
   if (isBrowser) {
-    centerLeft = document.getElementById("center-container");
+    centerCont = document.getElementById("center-container");
     centerRight = document.getElementById("center-right");
     centerLeft = document.getElementById("center-left");
   }
