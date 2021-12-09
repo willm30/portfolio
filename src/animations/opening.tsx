@@ -8,10 +8,10 @@ export function openingAnimation() {
   const left = document.getElementById("left-group");
   const right = document.getElementById("right-group");
   tl.set(W, {
-    xPercent: 430,
+    xPercent: 615,
   })
     .set(M, {
-      xPercent: -430,
+      xPercent: -615,
     })
     .set(left, {
       xPercent: -100,
