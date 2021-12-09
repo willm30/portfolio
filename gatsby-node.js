@@ -2,12 +2,24 @@ const path = require("path"); // eslint-disable-line
 
 exports.createPages = async ({ actions, graphql }) => {
   const { createPage } = actions;
-  const dummy = path.resolve(`src/pageTemplates/dummy.tsx`);
+  const blogPostTemplate = path.resolve(`src/pageTemplates/default.tsx`);
 
   return graphql(
     `
       query WritingMdx {
-        allMdx(sort: { fields: frontmatter___date, order: DESC }) {
+        all: allMdx(sort: { fields: frontmatter___date, order: DESC }) {
+          nodes {
+            id
+            slug
+            frontmatter {
+              imgRegex
+            }
+          }
+        }
+        writing: allMdx(
+          filter: { slug: { regex: "/writing//" } }
+          sort: { fields: frontmatter___date, order: DESC }
+        ) {
           nodes {
             id
             slug
@@ -20,7 +32,10 @@ exports.createPages = async ({ actions, graphql }) => {
       throw result.errors;
     }
 
-    const { nodes: allPosts } = result.data.allMdx;
+    const { nodes: allPosts } = result.data.all;
+    const { nodes: allWriting } = result.data.writing;
+    const allWritingIds = allWriting.map((n) => n.id);
+    const last = allWriting.length - 1;
 
     function removeTrailingSlash(slug) {
       const regex = /.*\/$/;
@@ -28,13 +43,28 @@ exports.createPages = async ({ actions, graphql }) => {
       return path;
     }
     allPosts.forEach((node) => {
-      const { id, slug } = node;
+      const { id, frontmatter, slug } = node;
+      const { imgRegex } = frontmatter;
+      const index = allWritingIds.indexOf(id);
       const path = removeTrailingSlash(slug);
       createPage({
         path: `/${path}`,
-        component: dummy,
+        component: blogPostTemplate,
         context: {
           id,
+          imgRegex: `/${imgRegex}/`,
+          nextPost:
+            index > -1
+              ? index > 0
+                ? removeTrailingSlash(allWriting[index - 1].slug)
+                : ""
+              : "",
+          previousPost:
+            index > -1
+              ? index < last
+                ? removeTrailingSlash(allWriting[index + 1].slug)
+                : ""
+              : "",
         },
       });
     });

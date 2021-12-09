@@ -1,0 +1,30 @@
+---
+title: "Preloading with Gatsby's Navigate Helper"
+titleLink: "https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-link/"
+metaTitle: "Preloading"
+imgRegex: "gatsbyNavigate"
+videoLink: ""
+date: 2021-12-06
+---
+
+In building this site, I needed to use Gatsby's Navigate helper in order to enable animations to programatically navigate on completion.
+
+## What The Link Component Does
+
+On implementing this, I noticed that I wasn't getting the preloading benefits of Gatsby's Link component. In short, when using a standard Gatsby Link component, whenever that component is on the page, Gatsby will initiate a low-priority fetch request for the link's contents (i.e. the url to be navigated to), and once the link is being hovered, it will initiate a high-priority request. This means that Gatsby is preloading pages for you, so that when you click on a link, much of the request has already been performed, which equates to faster loading times. 
+
+In order to retain the advantages of preloading even though I wasn't actually using the Gatsby Link component to perform navigation, I used a simple workaround (hack) to get the best of both worlds. 
+
+## Preloading Without Using Link (sort of)
+If you open up Dev Tools and click on one of the large navigation tabs ("Work", "Writing" etc.), you'll see the HTML consists of a <code>button</code> component wrapping a Gatsby <code>Link</code> component (which ultimately compiles down to a normal <code>anchor</code> tag). Now, if I left it here, whenever you clicked it one of the buttons, it would navigate immediately and you'd fail to see the animation. 
+
+However, if in the <code>Link</code> component, you add the following function to the onClick handler, you'll be able to prevent the Link component from actually navigating on click, and yet still take advantage of its preloading benefits: 
+
+<div className="flex justify-center items-center"><code>(e) => e.preventDefault()</code></div>
+
+See! I told you it was simple. This little trick allows you to have the best of both worlds: programmatic navigation and preloading using the Gatsby Link component. 
+
+What do you think? Ingenious or diabolical? Leave me a comment!
+
+P.S See the image gallery for the final code. The programmatic navigation is handled by the <code>handleClick</code> function passed to the <code>button</code>'s event handler.
+

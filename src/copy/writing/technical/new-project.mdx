@@ -1,0 +1,64 @@
+---
+titleLink: "/writing/technical/new-project"
+title: "How I Start A New Project"
+metaTitle: "New Project"
+imgRegex: ""
+videoLink: ""
+date: 2021-12-07
+---
+
+import Span from "../../../components/blog/elements/span";
+
+When starting a project, I like to understand two things: 
+
+1. What are the functional requirements
+2. What are the visual requirements
+
+## Functional Requirements
+
+Functional requirements refer to what you want your project to actually do. Are you selling something? If so we'll need a way to manage and display inventory and handle payments. Are you a writer? If so, you'll need a way to manage your content that's separate from the code for your website, and perhaps you'd like a comment section beneath each post.
+
+Once we understand what your project needs, I can then source the appropriate tools to get the job done. Gatsby has a library of over 2,500 plugins for all manner of integrations, from user logins to payments to content management, so in general, if you can conceive of it, it can be done!
+
+
+## Visual Requirements
+
+Visual requirements refer to how you want your site to look and feel. This includes the layout, colour scheme, typography, and the presence of animation, among other things. Every client wants something different, and every client knows what they're after to a differing extent. 
+
+If you have a design worked out already, on something like Photoshop or Figma, I can take it and implement it down to the last pixel. Alternatively, if you have a rougher idea, perhaps an inspiration folder on your computer of sites you admire, we can work together to get a wireframe in place that I can then use to build out the site. 
+
+It's really up to you. As I say, in general, if you can imagine it, I can build it!
+
+## The Technical Details
+
+For most people, I expect the foregoing is enough to give you a sense of whether you'd like to work together. However, if you'd like to learn a bit more about the tech stack I'm currently using, then read on!
+
+### GatsbyJS
+
+<a href="https://www.gatsbyjs.com/"><Span>GatsbyJS</Span></a> is my bread and butter. It's a static-site generator that makes client-side React development easy and super enjoyable. It also has support for server-side rendering for more complex use cases, which is just one example of the flexibility that comes from using Gatsby. 
+
+Another is in the range of plugins available in the Gatsby ecosystem. It means that I, the developer, can use my favourite tools to write your site's code, and you, the client, can use your favourite tools to manage your site's content (such as WordPress or Shopify), and they can all talk to each other to form the finished product. 
+
+And perhaps the most obvious benefit for the final user: Gatsby is *fast*. Content is rendered at build-time and served from a Content Distribution Network (which is just a server that is near the end user) as static html files that can be hydrated on the client. This means when you access the site URL, you don't have to wait for the server to put together your request: it's already there, rendered, and then your site's interactivity is loaded later in the client, when it's actually needed.  
+
+### TailwindCSS
+
+TailwindCSS makes writing custom CSS an absolute joy. It's a CSS utility library that essentially reduces the amount of choice developers are faced with when writing their own CSS. With that said, you can extend the basic style set (which is pretty extensive) for any custom styles you need (such as, say, styling list markers or the cursor or adding some CSS animations), and there's a custom syntax with Just-in-Time mode that lets you define styles with pixel-perfect precision.
+
+I love using Tailwind because it lets me write custom CSS, which personally I prefer to frameworks like Bootstrap, with far greater convenience than if I were managing my CSS directly. And, it manages to do this without making me feel "locked in", as if I had to make compromises about certain designs because the tool couldn't handle what my imagination were demanding of it! 
+
+### GSAP
+
+I have a very, very soft spot in my heart for good, performant web animations. I think, when not overdone, they add a sense of luxury to a site, and really make the user feel like they're using high quality software. Animation is very common in native applications, but less so on the web.
+
+And I can understand why. Getting animating right is hard. You have to understand things like the browser's render cycle and whether your animation will affect the paint or the composite phase. You also have to think about timings and using <code>requestAnimationFrame</code> in a way that achieves a 60fps frame rate. 
+
+This is why I choose to use GSAP for performant animations. It handles all of the technical implementation details, and lets me focus on what matters: getting my element from A to B in as stylish a way as possible.
+
+With that said, I always tread lightly with respect to the use of animation. Unless the purpose of the site is to showcase your facility with animation, animations are generally best implemented sparingly—the exception and not the rule. This is true not only for performance reasons (especially on mobile) but also because too much animation can become overwhelming or disorienting for the user, and distract from why they're really there. Plus animations are inherently more time-intensive to write than other aspects of the site, and therefore more expensive!
+
+## Gatsby Cloud
+
+Finally, the project needs to be deployed. That is to say, it needs to be hosted on a server so that when users navigate to your domain, they can be served the site's code. I use Gatsby Cloud to manage deployment and hosting because it integrates seamlessly with Gatsby and serves content from a CDN. It's also free to host (at least for small projects), which more mainstream services like GoDaddy and IONOS are not.
+
+That's it! Please leave me a comment if you use any of the tech from this stack or if you have any questions about anything I've mentioned here. 

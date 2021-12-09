@@ -13,6 +13,7 @@ export function useAllPortfolioPosts() {
             timeToRead
             frontmatter {
               title
+              titleLink
               date(formatString: "DD MMMM YYYY")
             }
           }
