@@ -1,3 +1,4 @@
+/*
 import "./src/styles/global.css";
 import React from "react";
 import { FirstRenderProvider } from "./src/context/firstRender";
@@ -13,3 +14,4 @@ export function wrapRootElement({ element }) {
     </ReactRecaptcha>
   );
 }
+*/
