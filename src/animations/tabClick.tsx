@@ -99,14 +99,18 @@ export function centerOut(url) {
 }
 
 export function centerOn() {
-  let centerCont, centerRight, centerLeft, centerFooter;
+  let centerCont;
+  let centerRight;
+  let centerLeft;
+  let centerFooter;
 
   if (isBrowser) {
-    centerLeft = document.getElementById("center-container");
+    centerCont = document.getElementById("center-container");
     centerRight = document.getElementById("center-right");
     centerLeft = document.getElementById("center-left");
     centerFooter = document.getElementById("center-footer");
   }
 
+  console.log(isBrowser, centerCont, centerRight, centerLeft, centerFooter);
   setVisible([centerCont, centerRight, centerLeft, centerFooter]);
 }

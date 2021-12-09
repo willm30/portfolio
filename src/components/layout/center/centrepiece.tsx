@@ -8,7 +8,7 @@ import React, {
 import { centerOn, centerIn } from "../../../animations/tabClick";
 import { PageProps } from "gatsby";
 import { TabNavigationContext } from "../../../context/tabNavigation";
-// import { FirstRenderContext } from "../../../context/firstRender";
+import { FirstRenderContext } from "../../../context/firstRender";
 import {
   openingAnimation,
   openingAnimationMobile,
@@ -39,7 +39,7 @@ export default function CentrePiece({
   const [isTabNavigation, setIsTabNavigation] =
     useContext(TabNavigationContext);
   const [scrollY, setScrollY] = useState(0);
-  // const [firstRender, handleFirstRender] = useContext(FirstRenderContext);
+  const [firstRender, handleFirstRender] = useContext(FirstRenderContext);
   const { frontmatter, tableOfContents } = blogPostData.post;
   const { imgRegex } = frontmatter;
   const { items } = tableOfContents;
@@ -54,8 +54,8 @@ export default function CentrePiece({
         "(prefers-reduced-motion: reduce)"
       ).matches;
     if (!reducedMotion) {
-      if (/*firstRender === null &&*/ pathname == "/") {
-        //handleFirstRender();
+      if (firstRender === null && pathname == "/") {
+        handleFirstRender();
         if (window.innerWidth < 768) {
           openingAnimationMobile();
         } else {
