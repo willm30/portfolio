@@ -8,12 +8,13 @@ import { areFontsReady } from "../utilities/fonts";
 export default function Writing({ data, location, pageContext }) {
   const [isLoading, setIsLoading] = useState(true);
   const [firstRender] = useContext(FirstRenderContext);
+  /*
   useEffect(() => {
     if (firstRender === null) {
       areFontsReady(setIsLoading);
     }
   }, []);
-
+*/
   //if (firstRender === null && isLoading) return <WaitingPage />;
 
   return (
@@ -25,6 +26,7 @@ export default function Writing({ data, location, pageContext }) {
   );
 }
 
+/*
 export const query = graphql`
   query Blogs($id: String!) {
     post: mdx(id: { eq: $id }) {
@@ -37,7 +39,7 @@ export const query = graphql`
     }
   }
 `;
-
+*/
 /*
 query Blogs($id: String!, $imgRegex: String!) {
     post: mdx(id: { eq: $id }) {
