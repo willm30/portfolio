@@ -13,6 +13,7 @@ export default function Group({
 }) {
   const [firstRender] = useContext(FirstRenderContext);
   const vis = firstRender === null ? "invisible" : "";
+  console.log(vis, "vis", firstRender, "firstRender");
   return (
     <div
       id={`${left ? "left" : "right"}-group`}

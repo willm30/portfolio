@@ -8,6 +8,7 @@ import { areFontsReady } from "../utilities/fonts";
 export default function Writing({ data, location, pageContext }) {
   const [isLoading, setIsLoading] = useState(true);
   const [firstRender] = useContext(FirstRenderContext);
+
   useEffect(() => {
     if (firstRender === null) {
       areFontsReady(setIsLoading);
