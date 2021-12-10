@@ -1,8 +1,9 @@
-export async function areFontsReady(setIsLoading, boolean) {
+export async function areFontsReady(setHaveFontsLoaded, boolean) {
   const isBrowser = typeof document != "undefined";
 
   if (isBrowser) {
     await document.fonts.ready;
-    setIsLoading(boolean);
+    window.sessionStorage.setItem("fontsLoaded", "true");
+    setHaveFontsLoaded(boolean);
   }
 }

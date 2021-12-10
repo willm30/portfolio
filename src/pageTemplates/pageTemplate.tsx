@@ -1,10 +1,7 @@
 import { graphql, PageProps } from "gatsby";
-import React, { useEffect, useState } from "react";
-import { useContext } from "react";
+import React, { useState } from "react";
 import CentrePiece from "../components/layout/center/centrepiece";
 import Scaffold from "../components/layout/scaffold";
-import { FirstRenderContext } from "../context/firstRender";
-import { areFontsReady } from "../utilities/fonts";
 import WaitingPage from "./waitingPage";
 export default function PageTemplate({
   data,
@@ -16,19 +13,17 @@ export default function PageTemplate({
   location: PageProps["location"];
 }) {
   const { frontmatter } = data.post;
-  const [isLoading, setIsLoading] = useState(true);
-  //const [firstRender] = useContext(FirstRenderContext);
+  const fontsLoaded =
+    typeof window != "undefined" &&
+    window.sessionStorage.getItem("fontsLoaded");
+  const [, setHaveFontsLoaded] = useState();
 
-  useEffect(() => {
-    areFontsReady(setIsLoading, false);
-  }, []);
-
-  return isLoading ? (
-    <WaitingPage />
-  ) : (
+  return fontsLoaded ? (
     <Scaffold location={location} title={frontmatter.metaTitle}>
       <CentrePiece {...{ data, pageContext, location }} />
     </Scaffold>
+  ) : (
+    <WaitingPage {...{ setHaveFontsLoaded }} />
   );
 }
 
