@@ -2,7 +2,7 @@ const path = require("path"); // eslint-disable-line
 
 exports.createPages = async ({ actions, graphql }) => {
   const { createPage } = actions;
-  const blogPostTemplate = path.resolve(`src/pageTemplates/default.tsx`);
+  const blogPostTemplate = path.resolve(`src/pageTemplates/pageTemplate.tsx`);
 
   return graphql(
     `

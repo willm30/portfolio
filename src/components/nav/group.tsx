@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { FirstRenderContext } from "../../context/firstRender";
+import React, { useEffect, useRef } from "react";
+import { setVisible } from "../../animations/tabClick";
 import Heading from "./heading";
 
 export default function Group({
@@ -11,13 +11,18 @@ export default function Group({
   titles: string[];
   pathname: string;
 }) {
-  const [firstRender] = useContext(FirstRenderContext);
-  const vis = firstRender === null ? "invisible" : "";
-  console.log(vis, "vis", firstRender, "firstRender");
+  const divRef = useRef();
+  useEffect(() => {
+    setVisible(divRef.current);
+  });
+
   return (
     <div
+      ref={divRef}
       id={`${left ? "left" : "right"}-group`}
-      className={`${vis} flex flex-col justify-end ${left ? "" : "items-end"}`}
+      className={`invisible flex flex-col justify-end ${
+        left ? "" : "items-end"
+      }`}
     >
       {titles.map((t) => (
         <Heading title={t} pathname={pathname} key={t} />

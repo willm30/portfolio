@@ -78,7 +78,7 @@ export function centerIn() {
   navigateIn(tl, [centerCont, centerRight, centerLeft]);
 }
 
-function setVisible(target) {
+export function setVisible(target) {
   gsap.set(target, {
     y: 0,
     visibility: "visible",

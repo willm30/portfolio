@@ -27,11 +27,11 @@ import { useOverflowEffect } from "../../../utilities/hooks/checkOverflow";
 import FooterTemplate from "./content/footer/footer";
 
 export default function CentrePiece({
-  blogPostData,
+  data,
   location,
   pageContext,
 }: {
-  blogPostData: any;
+  data: any;
   location: PageProps["location"];
   pageContext: any;
 }) {
@@ -40,13 +40,14 @@ export default function CentrePiece({
     useContext(TabNavigationContext);
   const [scrollY, setScrollY] = useState(0);
   const [firstRender, handleFirstRender] = useContext(FirstRenderContext);
-  const { frontmatter, tableOfContents } = blogPostData.post;
+  const { frontmatter, tableOfContents } = data.post;
   const { imgRegex } = frontmatter;
   const { items } = tableOfContents;
   const { nextPost, previousPost } = pageContext;
   const isBrowser = typeof window != "undefined";
 
   useLayoutEffect(() => {
+    console.log("centerpiece layout effect");
     let reducedMotion;
 
     if (isBrowser)
@@ -139,7 +140,7 @@ export default function CentrePiece({
           id="center-container"
           className={`${styles.desktop.center} ${styles.mobile.center}`}
         >
-          <ContentTemplate blogPost={blogPostData.post} pathname={pathname} />
+          <ContentTemplate blogPost={data.post} pathname={pathname} />
         </div>
         <div id="center-footer" className="invisible">
           <FooterTemplate
@@ -156,8 +157,8 @@ export default function CentrePiece({
         {imgRegex ? (
           <ScreenShotTemplate
             video={frontmatter.videoLink}
-            imgFull={blogPostData.imgFull}
-            imgThumbnail={blogPostData.imgThumbnail}
+            imgFull={data.imgFull}
+            imgThumbnail={data.imgThumbnail}
           />
         ) : null}
       </div>

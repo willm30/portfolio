@@ -1,21 +1,75 @@
-import { PageProps } from "gatsby";
-import React from "react";
+import { graphql, PageProps } from "gatsby";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import CentrePiece from "../components/layout/center/centrepiece";
 import Scaffold from "../components/layout/scaffold";
+import { FirstRenderContext } from "../context/firstRender";
+import { areFontsReady } from "../utilities/fonts";
+import WaitingPage from "./waitingPage";
 export default function PageTemplate({
-  blogPostData,
+  data,
   location,
   pageContext,
 }: {
-  blogPostData: any;
+  data: any;
   pageContext: any;
   location: PageProps["location"];
 }) {
-  const { frontmatter } = blogPostData.post;
-  console.log("pageTemplate");
-  return (
+  const { frontmatter } = data.post;
+  const [firstRender, setfirstRender] = useState(true);
+
+  console.log("page template");
+  useEffect(() => {
+    console.log("page template effect");
+    areFontsReady(setfirstRender, false);
+  }, []);
+
+  return firstRender ? (
+    <WaitingPage />
+  ) : (
     <Scaffold location={location} title={frontmatter.metaTitle}>
-      <CentrePiece {...{ blogPostData, pageContext, location }} />
+      <CentrePiece {...{ data, pageContext, location }} />
     </Scaffold>
   );
 }
+
+export const query = graphql`
+  query Blogs($id: String!, $imgRegex: String!) {
+    post: mdx(id: { eq: $id }) {
+      body
+      id
+      frontmatter {
+        date(formatString: "DD MMMM YYYY")
+        title
+        titleLink
+        metaTitle
+        videoLink
+        imgRegex
+      }
+      wordCount {
+        words
+      }
+      timeToRead
+      tableOfContents
+    }
+    imgFull: allImageSharp(
+      filter: { fixed: { originalName: { regex: $imgRegex } } }
+    ) {
+      nodes {
+        gatsbyImageData(layout: CONSTRAINED, placeholder: BLURRED)
+        fixed {
+          originalName
+        }
+      }
+    }
+    imgThumbnail: allImageSharp(
+      filter: { fixed: { originalName: { regex: $imgRegex } } }
+    ) {
+      nodes {
+        gatsbyImageData(layout: CONSTRAINED, placeholder: BLURRED, width: 200)
+        fixed {
+          originalName
+        }
+      }
+    }
+  }
+`;
