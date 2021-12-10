@@ -17,13 +17,13 @@ export default function PageTemplate({
 }) {
   const { frontmatter } = data.post;
   const [isLoading, setIsLoading] = useState(true);
-  const [firstRender] = useContext(FirstRenderContext);
+  //const [firstRender] = useContext(FirstRenderContext);
 
   useEffect(() => {
     areFontsReady(setIsLoading, false);
   }, []);
 
-  return firstRender === null && isLoading ? (
+  return isLoading ? (
     <WaitingPage />
   ) : (
     <Scaffold location={location} title={frontmatter.metaTitle}>
