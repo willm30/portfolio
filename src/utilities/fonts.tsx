@@ -1,8 +1,9 @@
-const isBrowser = typeof document != "undefined";
-
 export async function areFontsReady(setIsLoading) {
+  const isBrowser = typeof document != "undefined";
+
   if (isBrowser) {
-    await document.fonts.ready;
+    const ready = await document.fonts.ready;
+    console.log(ready);
     setIsLoading(false);
   }
 }
