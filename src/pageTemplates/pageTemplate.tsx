@@ -12,6 +12,7 @@ export default function PageTemplate({
   location: PageProps["location"];
 }) {
   const { frontmatter } = blogPostData.post;
+  console.log("pageTemplate");
   return (
     <Scaffold location={location} title={frontmatter.metaTitle}>
       <CentrePiece {...{ blogPostData, pageContext, location }} />
