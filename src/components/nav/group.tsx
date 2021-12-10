@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from "react";
-import { setVisible } from "../../animations/tabClick";
+import React from "react";
 import Heading from "./heading";
 
 export default function Group({
@@ -11,18 +10,10 @@ export default function Group({
   titles: string[];
   pathname: string;
 }) {
-  const divRef = useRef();
-  useEffect(() => {
-    setVisible(divRef.current);
-  });
-
   return (
     <div
-      ref={divRef}
       id={`${left ? "left" : "right"}-group`}
-      className={`invisible flex flex-col justify-end ${
-        left ? "" : "items-end"
-      }`}
+      className={` flex flex-col justify-end ${left ? "" : "items-end"}`}
     >
       {titles.map((t) => (
         <Heading title={t} pathname={pathname} key={t} />

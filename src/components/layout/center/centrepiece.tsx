@@ -8,7 +8,6 @@ import React, {
 import { centerOn, centerIn } from "../../../animations/tabClick";
 import { PageProps } from "gatsby";
 import { TabNavigationContext } from "../../../context/tabNavigation";
-import { FirstRenderContext } from "../../../context/firstRender";
 import {
   openingAnimation,
   openingAnimationMobile,
@@ -25,6 +24,7 @@ import ScreenShotTemplate from "./galllery/screenShotTemplate";
 import TOC from "../../blog/tableOfContents/toc";
 import { useOverflowEffect } from "../../../utilities/hooks/checkOverflow";
 import FooterTemplate from "./content/footer/footer";
+import { FirstRenderContext } from "../../../context/firstRender";
 
 export default function CentrePiece({
   data,
@@ -47,14 +47,13 @@ export default function CentrePiece({
   const isBrowser = typeof window != "undefined";
 
   useLayoutEffect(() => {
-    console.log("centerpiece layout effect");
-    let reducedMotion;
+    let prefersReducedMotion;
 
     if (isBrowser)
-      reducedMotion = window.matchMedia(
+      prefersReducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)"
       ).matches;
-    if (!reducedMotion) {
+    if (!prefersReducedMotion) {
       if (firstRender === null && pathname == "/") {
         handleFirstRender();
         if (window.innerWidth < 768) {
@@ -92,7 +91,7 @@ export default function CentrePiece({
     }
   }
 
-  const container = useRef<HTMLElement>(null);
+  const container = useRef();
   const [hasOverflowed, setHasOverflowed] = useState(false);
 
   useOverflowEffect(container, setHasOverflowed);

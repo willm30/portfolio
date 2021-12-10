@@ -1,5 +1,6 @@
 import { graphql, PageProps } from "gatsby";
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useContext } from "react";
 import CentrePiece from "../components/layout/center/centrepiece";
 import Scaffold from "../components/layout/scaffold";
 import { FirstRenderContext } from "../context/firstRender";
@@ -15,15 +16,14 @@ export default function PageTemplate({
   location: PageProps["location"];
 }) {
   const { frontmatter } = data.post;
-  const [firstRender, setfirstRender] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [firstRender] = useContext(FirstRenderContext);
 
-  console.log("page template");
   useEffect(() => {
-    console.log("page template effect");
-    areFontsReady(setfirstRender, false);
+    areFontsReady(setIsLoading, false);
   }, []);
 
-  return firstRender ? (
+  return firstRender === null && isLoading ? (
     <WaitingPage />
   ) : (
     <Scaffold location={location} title={frontmatter.metaTitle}>

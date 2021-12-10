@@ -1,11 +1,8 @@
 import React from "react";
 import {
   bgDark,
-  bgLight,
   borderLight,
-  fontHeading,
   fontAlt,
-  textDark,
   textLight,
   buttonBase,
 } from "../../styles/common";
