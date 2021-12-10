@@ -29,7 +29,7 @@ I really like using Mdx as it combines the benefits of Markdown and its plugin e
 
 I had also already used up my single free Contentful space on another project, and so instead of getting set up on another CMS, I just decided to use the <code>gatsby-source-filesystem</code> plugin to source my content locally. This had some *interesting* implications for image sourcing, which I'll get to later.
  
-Since every page is layed out in the same way, I only need one page template, which queries for the file ID passed in as the page gets created with Gatsby's dynamic routing API. I could have also set this up myself in the gatsby-node.js file, but there is literally no point given that the {Query.somequery} filename syntax does this automatically.
+Since every page is layed out in the same way, I only need one page template, which queries for the file ID passed in as the page gets created with Gatsby's dynamic routing API. I could have also set this up myself in the gatsby-node.js file, but there is literally no point given that the {Query.somequery} filename syntax does this automatically. [Editor's note: I actually ended up going down the gatsby-node route, see below for my reasoning.]
 
 I do shift the central layout slightly depending on whether or not the gallery or table of contents is present, which ensures it's always taking up the right amount of space; but that besides, it's essentially the same structure as the general page scaffold. 
 
@@ -43,7 +43,7 @@ I wanted an image gallery that appeared as a modal, so I wasn't restricted to sh
 
 Fortunately, <code>gatsby-plugin-portal</code> does exactly that, so you can then build a portal component that appends a div to your portal root, which can be loaded from anywhere in your project (in my case, from inside the content template).
 
-The gallery component itself consistents of two containers aligned vertically, one for the display image and one below for all the image thumbnails. The largest image number I've tested so far is 5, and so haven't yet implemented some sort of scrolling function for the thumbnail images—but if I need to, I'll certainly get round to it. 
+The gallery component itself consists of two containers aligned vertically, one for the display image and one below for all the image thumbnails. The largest image number I've tested so far is 5, and so haven't yet implemented some sort of scrolling function for the thumbnail images—but if I need to, I'll certainly get round to it. 
 
 I added some keyboard arrow listeners so you can flick through the images nice and easily, and added my <code>navigate in</code> animation so you don't feel assaulted when the modal appears. So far, so good...
 
@@ -61,7 +61,7 @@ I put the thought of writing a custom image-optimisation plugin on the bucket li
 
 #### Attempt 1: Pure hack
 
-Because originally, I was using the Gatsby's dynamic page creator API, which looks for file names wrapped in curly braces and then uses the query path inside those braces to generate a filename, I didn't have access to my page's page context.
+Because originally I was using Gatsby's dynamic page creator API, which looks for file names wrapped in curly braces and then uses the query path inside those braces to generate a filename, I didn't have access to my page's page context.
 
 This meant that in my page query, the only variable I could access was the id, and given I was creating pages from a file called <code>{Mdx.slug}.tsx</code>, that meant I could only query for specific mdx files and not for specific images.
 
@@ -75,13 +75,13 @@ Very ugly!
 
 Filtering on the client adds needless work for the browser at runtime if it's the case that the filtering could have been done at build time—which, I discovered when writing this very post, it could!
 
-I decided create a <code>gatsby-node.js</code> file and use the createPages API myself. This way I can query for allMdx files and pass in the regex as pageContext, and then instead of querying for images in the gallery component, I can run a page query from my page template that uses the regex as a filter.
+I decided to create a <code>gatsby-node.js</code> file and use the createPages API myself. This way I can query for allMdx files and pass in the regex as pageContext, and then instead of querying for images in the gallery component, I can run a page query from my page template that uses the regex as a filter.
 
 I can then pass all the relevant data down from a single source, instead of querying once at the page level and again at the component level. It also means I'm only passing down relevant data and can do away with the work of filtering images inside the gallery component.
 
 This solution came to me as I was writing this post. It's nicer than my original solution, and arguably nice enough to render the writing of a custom CMS-style plugin a waste of time. 
 
-The only slight constraint of doing it this way is that my image file names must be written according to a convention order in order for the regex to work, and I need to include a regex in all posts that have images (or an empty string in those that don't).
+The only slight constraint of doing it this way is that my image file names must be written according to a convention in order for the regex to work, and I need to include a regex in all posts that have images (or an empty string in those that don't).
 
 My image names currently look like, e.g. 1.IndividualPicture_purpleOrchard. The number is the order I'd like the image to appear in (more on this in a moment), the substring before the underscore is the image caption that I parse in my gallery component, and the final substring is the regex.
 
@@ -89,7 +89,7 @@ This is a slightly hackier way of defining all relevant metadata inside a JSON, 
 
 #### Solving the Ordering Problem
 
-Another trouble I faced was getting my images to render in the order I wanted. Either GraphQL was rendering them out of source order, or as part of my original filtering process, I was rejigging them. 
+Another trouble I faced was getting my images to render in the order I wanted. Either GraphQL was rendering them out of source order, or as part of my original filtering process, I was rejigging them accidentally. 
 
 Either way, a guaranteed solution was to put the images inside a flex container and give them an order style property. This is why I put a number at the start of the image's filename, since it gets used as the order value and guarantees that my images will show up in the order I expect.
 
@@ -99,11 +99,11 @@ For comments, I used <code>gatsby-plugin-disqus</code>, which was *much* easier 
 
 This is a great plugin in my opinion, as it would be a real time investment to code a comment app yourself. This took about 15 minutes and means I don't have to worry about a server or database for my comments.
 
-With that said, the one downside is that you forfeit control over styling of the comment section, but this is a price I'm happy to pay for the convenience, and it means readers and interact with me more naturally than by leaving the site to send me an email.
+With that said, the one downside is that you forfeit control over styling of the comment section, but this is a price I'm happy to pay for the convenience, and it means readers can interact with me more naturally than by leaving the site to send me an email.
 
 ### Table of Contents
 
-I wanted a TOC to appear beside my blog posts, and fortunately, this was made incredibly easy thanks to <code>gatsby-plugin-mdx</code>. It automatically puts markdown headings into an array as a object with the # link and the heading title, so you can just query for this data and map through it to produce a TOC.
+I wanted a TOC to appear beside my blog posts, and fortunately, this was made incredibly easy thanks to <code>gatsby-plugin-mdx</code>. It automatically puts markdown headings into an array as an object with the # link and the heading title, so you can just query for this data and map through it to produce a TOC.
 
 All I have to do is remember to add headings when writing in order that they appear in the TOC. That's it!
 
@@ -131,7 +131,7 @@ Like flashes of unstyled content, I was noticing flashes of unstyled text when f
 
 This man will possibly never know how much joy he brought into my life when I saw he'd made a Gatsby plugin solving this exact problem, but about 5 minutes after installing Gatsby Omni Font Loader, my problem had been solved and I wasn't getting the same jarring flash of unstyled text I had been originally. 
 
-To be extra safe, I implemented a loading icon that users see while text is getting ready. To do this, I use the <a href="https://developer.mozilla.org/en-US/docs/Web/API/FontFaceSet">FontFace API</a> that is exposed on the document object, and only run my opening animation once the ready method returns true. You might see this flash for about half a second, but once it's ready, there's not FOUT, which I was getting before installing Adrian's Omnifont plugin, even though the API was telling me my fonts were ready.
+To be extra safe, I implemented a loading icon that users see while text is getting ready. To do this, I use the <a href="https://developer.mozilla.org/en-US/docs/Web/API/FontFaceSet">FontFace API</a> that is exposed on the document object, and only run my opening animation once the ready method returns true. You might see this flash for about half a second, but once it's ready, there's no FOUT, which I was getting before installing Adrian's Omnifont plugin, even though the API was telling me my fonts were ready.
 
 A head scratcher for sure, but not one that warrants too much further investigation thanks to <a href="https://www.gatsbyjs.com/plugins/gatsby-omni-font-loader/">Gatsby Omni Font Loader</a>!
 
@@ -145,4 +145,4 @@ I'm not sure why, but I've always felt resistance to writing on commercial blogg
 
 Well now I have that, so hopefully it'll lead to a lot more writing!
 
-The code for this site is <a href="https://github.com/willm30/portfolio">public on Github</a>. Please take a look if there's anything I've mentioned you'd like to replicate specifically, and leave me a comment if you'd like to know more about anything I've mentioned—or if you see rooom for improvement!
+The code for this site is <a href="https://github.com/willm30/portfolio">public on Github</a>. Please take a look if there's anything I've mentioned you'd like to replicate specifically, and leave me a comment if you'd like to know more about anything I've mentioned—or if you see room for improvement!
