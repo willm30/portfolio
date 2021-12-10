@@ -10,6 +10,7 @@ export default function DefaultPage({ data, location, pageContext }) {
   const [firstRender] = useContext(FirstRenderContext);
   console.log("default page");
   useLayoutEffect(() => {
+    console.log("layout effect");
     if (firstRender === null) {
       areFontsReady(setIsLoading);
     }
