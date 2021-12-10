@@ -8,7 +8,7 @@ import { areFontsReady } from "../utilities/fonts";
 export default function DefaultPage({ data, location, pageContext }) {
   const [isLoading, setIsLoading] = useState(true);
   const [firstRender] = useContext(FirstRenderContext);
-
+  console.log("default page");
   useLayoutEffect(() => {
     if (firstRender === null) {
       areFontsReady(setIsLoading);
