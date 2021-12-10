@@ -20,7 +20,7 @@ export default function Scaffold({
     desktop: {
       cont: `h-screen w-full grid md:grid-cols-scaffold grid-rows-3 md:grid-rows-1 overflow-hidden ${bgDark}`,
       left: "md:col-start-1 md:col-end-2 md:row-start-1 md:grid md:grid-cols-1 md:grid-rows-w",
-      center: "md:col-start-2 md:col-end-3 md:row-start-1",
+      center: "md:col-start-2 md:col-end-3 md:row-start-1 md:grid-rows-centre",
       right:
         "md:col-start-3 md:col-end-4 md:row-start-1 md:grid md:grid-cols-1 md:grid-rows-w",
     },

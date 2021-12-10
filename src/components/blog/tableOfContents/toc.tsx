@@ -62,6 +62,7 @@ export default function TOC({ items }) {
               item={i}
               bgColor={bgColor}
               onClick={() => handleClick(i.url)}
+              key={i.url}
             />
           );
         })}

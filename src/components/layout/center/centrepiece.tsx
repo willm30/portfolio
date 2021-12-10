@@ -44,15 +44,12 @@ export default function CentrePiece({
   const { imgRegex } = frontmatter;
   const { items } = tableOfContents;
   const { nextPost, previousPost } = pageContext;
-  const isBrowser = typeof window != "undefined";
 
   useLayoutEffect(() => {
-    let prefersReducedMotion;
+    const prefersReducedMotion =
+      typeof window != "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (isBrowser)
-      prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
     if (!prefersReducedMotion) {
       if (firstRender === null && pathname == "/") {
         handleFirstRender();
