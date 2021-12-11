@@ -3,9 +3,16 @@ import React, { useContext } from "react";
 import { centerOut } from "../../animations/tabClick";
 import { TabNavigationContext } from "../../context/tabNavigation";
 
-export default function NavigateButton({ children, url, pathname, className }) {
+export default function NavigateButton({
+  children,
+  url,
+  pathname,
+  className,
+  linkClass,
+}) {
   const [, setIsTabNavigation] = useContext(TabNavigationContext);
   const isBrowser = typeof window != "undefined";
+  const isMobile = isBrowser && window.innerWidth < 768;
 
   function handleClick() {
     let reducedMotion;
@@ -26,10 +33,14 @@ export default function NavigateButton({ children, url, pathname, className }) {
   }
 
   return (
-    <button onClick={handleClick} className={className}>
-      <Link to={`${url}`} onClick={(e) => e.preventDefault()}>
+    <Link
+      to={`${url}`}
+      onClick={(e) => e.preventDefault()}
+      className={linkClass}
+    >
+      <button onClick={handleClick} className={className}>
         {children}
-      </Link>
-    </button>
+      </button>
+    </Link>
   );
 }

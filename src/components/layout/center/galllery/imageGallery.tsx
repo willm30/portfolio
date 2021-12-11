@@ -25,7 +25,7 @@ import Thumbnail from "./thumbnail";
 
 export default function ImageGallery({
   images,
-  video,
+  videoLink,
   setModalDisplay,
   thumbnailIndex,
 }) {
@@ -70,22 +70,25 @@ export default function ImageGallery({
   return (
     <div
       ref={modalCont}
-      className={`absolute w-screen h-screen top-0 left-0 grid grid-cols-modal grid-rows-1 overflow-hidden`}
+      className={`absolute w-screen h-screen top-0 left-0 grid grid-cols-1 md:grid-cols-modal grid-rows-1 overflow-hidden`}
     >
       <div
-        className={`col-start-1 col-end-2 hover:cursor-pointer `}
+        className={`hidden md:block md:col-start-1 md:col-end-2 hover:cursor-pointer `}
         onClick={handleClose}
       />
       <div
         id="modal-center"
-        className="relative col-start-2 col-end-3 flex flex-col justify-center"
+        className="relative md:col-start-2 md:col-end-3 flex flex-col justify-center"
       >
         <div
           id="gallery-cont"
           ref={galRef}
-          className={`invisible ${bgDark} ${borderLight} border-4 grid grid-rows-modal grid-cols-1 min-h-[85%]`}
+          className={`invisible ${bgDark} ${borderLight} border-4 grid grid-rows-modal grid-cols-1 min-h-[85%] overflow-y-scroll`}
         >
-          <button className="absolute top-0 -right-10" onClick={handleClose}>
+          <button
+            className="absolute top-2 right-2 md:top-0 md:-right-10"
+            onClick={handleClose}
+          >
             <Cross className={`fill-current ${textLight}`} />
           </button>
           <div className="row-start-1 row-end-2 p-4">
@@ -109,7 +112,7 @@ export default function ImageGallery({
                   <iframe
                     width="100%"
                     height="100%"
-                    src={video}
+                    src={videoLink}
                     title="YouTube video player"
                     frameBorder="0"
                     allow=""
@@ -131,13 +134,20 @@ export default function ImageGallery({
             </div>
           </div>
           <div className="row-start-2 row-end-3">
-            <div className="flex justify-center items-center px-2">
+            <div className="flex md:flex-nowrap flex-wrap justify-center items-center px-2">
               {images.map((image) => {
                 const index = getOrder(image);
-                const borderBottom = selectedIndex == index ? "" : "hidden";
+                const short =
+                  typeof window != "undefined" && window.innerHeight < 600;
+
+                const display =
+                  selectedIndex == index
+                    ? `hidden ${short ? "" : "md:block"}`
+                    : "hidden";
+
                 return (
                   <div
-                    className="flex flex-col items-center"
+                    className="flex flex-col w-1/2 md:w-auto items-center md:my-0 my-2"
                     key={`galleryThumbnal${index}`}
                     style={{ order: getOrder(image) }}
                   >
@@ -147,7 +157,7 @@ export default function ImageGallery({
                       className="mx-2"
                     />
                     <div
-                      className={`${borderBottom} h-[0.5rem] w-[90%] ${bgLight} mt-2`}
+                      className={`${display} h-[0.5rem] w-[90%] ${bgLight} mt-2`}
                     />
                   </div>
                 );
@@ -157,7 +167,7 @@ export default function ImageGallery({
         </div>
       </div>
       <div
-        className={`col-start-3 col-end-4 hover:cursor-pointer`}
+        className={`hidden md:block md:col-start-3 md:col-end-4 hover:cursor-pointer`}
         onClick={handleClose}
       ></div>
     </div>

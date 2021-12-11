@@ -1,17 +1,22 @@
 import gsap from "gsap";
 import { centerIn } from "./tabClick";
 
-export function openingAnimation() {
+function openingAnimation() {
   const tl = gsap.timeline();
   const W = document.getElementById("W-initial");
   const M = document.getElementById("M-initial");
   const left = document.getElementById("left-group");
   const right = document.getElementById("right-group");
+  const x = 2.5;
   tl.set(W, {
-    xPercent: 615,
+    x: function () {
+      return window.innerWidth / x;
+    },
   })
     .set(M, {
-      xPercent: -615,
+      x: function () {
+        return -(window.innerWidth / x);
+      },
     })
     .set(left, {
       xPercent: -100,
@@ -22,7 +27,7 @@ export function openingAnimation() {
     .to(
       [W, M],
       {
-        xPercent: 0,
+        x: 0,
         visibility: "visible",
         duration: 1.5,
         ease: "power1.inOut",
@@ -43,7 +48,7 @@ export function openingAnimation() {
     );
 }
 
-export function openingAnimationMobile() {
+function openingAnimationMobile() {
   const tl = gsap.timeline();
   const left = document.getElementById("left-group");
   const right = document.getElementById("right-group");
@@ -69,4 +74,12 @@ export function openingAnimationMobile() {
 
 function delayIn(time_ms: number) {
   setTimeout(centerIn, time_ms);
+}
+
+export function runOpeningAnimation() {
+  if (window.innerWidth < 768) {
+    openingAnimationMobile();
+  } else {
+    openingAnimation();
+  }
 }

@@ -6,7 +6,7 @@ export const mdxStyles = {
   h2: (props) => (
     <h2
       {...props}
-      className={`observable ${textLarge} ${highlight} flex w-max font-bold my-1`}
+      className={`observable ${textLarge} ${highlight} flex md:w-max font-bold my-1`}
     />
   ),
   h3: (props) => (

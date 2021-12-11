@@ -1,17 +1,32 @@
 import React from "react";
 import NextPost from "../../../../buttons/nextPost";
 
-export default function WritingFooter({ prev, next, pathname }) {
+export default function WritingFooter({ prevPost, nextPost, pathname }) {
+  const isMobile = typeof window != "undefined" && window.innerWidth < 768;
+  const left = isMobile
+    ? ""
+    : prevPost == "writing"
+    ? "All Posts"
+    : "Previous Post";
+  const right = isMobile ? "" : "Next Post";
   return (
     <>
-      {prev && (
-        <NextPost url={`/${prev}`} pathname={pathname}>
-          &larr; {prev == "writing" ? "All Posts" : "Previous Post"}
+      {prevPost && (
+        <NextPost
+          url={`/${prevPost}`}
+          pathname={pathname}
+          className="flex justify-center items-center w-full md:w-auto"
+        >
+          &larr; {left}
         </NextPost>
       )}
-      {next && (
-        <NextPost url={`/${next}`} pathname={pathname}>
-          Next Post &rarr;
+      {nextPost && (
+        <NextPost
+          url={`/${nextPost}`}
+          pathname={pathname}
+          className="flex justify-center items-center w-full md:w-auto"
+        >
+          {right} &rarr;
         </NextPost>
       )}
     </>

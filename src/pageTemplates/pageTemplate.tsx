@@ -1,6 +1,6 @@
 import { graphql, PageProps } from "gatsby";
 import React, { useState } from "react";
-import CentrePiece from "../components/layout/center/centrepiece";
+import ScaffoldMobile from "../components/layout/mobile/scaffoldMobile";
 import Scaffold from "../components/layout/scaffold";
 import WaitingPage from "./waitingPage";
 export default function PageTemplate({
@@ -9,19 +9,22 @@ export default function PageTemplate({
   pageContext,
 }: {
   data: any;
-  pageContext: any;
+  pageContext: PageProps["pageContext"];
   location: PageProps["location"];
 }) {
   const { frontmatter } = data.post;
-  const fontsLoaded =
-    typeof window != "undefined" &&
-    window.sessionStorage.getItem("fontsLoaded");
+  const isBrowser = typeof window != "undefined";
+  const fontsLoaded = isBrowser && window.sessionStorage.getItem("fontsLoaded");
   const [, setHaveFontsLoaded] = useState();
+  const isMobile = isBrowser && window.innerWidth < 768;
 
   return fontsLoaded ? (
-    <Scaffold location={location} title={frontmatter.metaTitle}>
-      <CentrePiece {...{ data, pageContext, location }} />
-    </Scaffold>
+    <Scaffold
+      location={location}
+      title={frontmatter.metaTitle}
+      data={data}
+      pageContext={pageContext}
+    />
   ) : (
     <WaitingPage {...{ setHaveFontsLoaded }} />
   );
@@ -68,3 +71,6 @@ export const query = graphql`
     }
   }
 `;
+function setOrientation(type: string) {
+  throw new Error("Function not implemented.");
+}

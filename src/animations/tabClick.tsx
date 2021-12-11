@@ -1,48 +1,24 @@
 import { navigate } from "gatsby";
 import gsap from "gsap";
 
-const isBrowser = typeof document != "undefined";
-
 export function navigateOut(tl, target, url) {
-  let centerFooter;
-
-  if (isBrowser) centerFooter = document.getElementById("center-footer");
-
-  return tl
-    .to(target, {
-      y: function (_, target) {
-        const targetBottom = target.getBoundingClientRect().bottom;
-        return -targetBottom;
-      },
-      duration: 1,
-      ease: "power3.in",
-    })
-    .to(
-      centerFooter,
-      {
-        y: function (_, target) {
-          const targetBottom = target.getBoundingClientRect().bottom;
-          return -targetBottom;
-        },
-        duration: 1,
-        ease: "power3.in",
-        onComplete: navigate,
-        onCompleteParams: [url],
-      },
-      ">-0.95"
-    );
+  return tl.to(target, {
+    y: function (_, target) {
+      const targetBottom = target.getBoundingClientRect().bottom;
+      return -targetBottom;
+    },
+    duration: 1,
+    ease: "power3.in",
+    onComplete: navigate,
+    onCompleteParams: [url],
+  });
 }
 
 export function navigateIn(tl, target) {
-  let centerFooter;
-
-  if (isBrowser) centerFooter = document.getElementById("center-footer");
-
   return tl
-    .set([...target, centerFooter], {
+    .set(target, {
       y: function (_, target) {
-        const windowHeight =
-          typeof window != "undefined" ? window.innerHeight : null;
+        const windowHeight = window.innerHeight;
         const targetY = target.getBoundingClientRect().y;
         return windowHeight - targetY;
       },
@@ -52,30 +28,14 @@ export function navigateIn(tl, target) {
       duration: 1.5,
       ease: "power3",
       visibility: "visible",
-    })
-    .to(
-      centerFooter,
-      {
-        y: 0,
-        duration: 1,
-        ease: "power3",
-        visibility: "visible",
-      },
-      "<+=0.55"
-    );
+    });
 }
 
 export function centerIn() {
-  let centerCont, centerRight, centerLeft;
-
-  if (isBrowser) {
-    centerCont = document.getElementById("center-container");
-    centerRight = document.getElementById("center-right");
-    centerLeft = document.getElementById("center-left");
-  }
-
+  const centerRoot =
+    typeof window != "undefined" && document.getElementById("center-root");
   const tl = gsap.timeline();
-  navigateIn(tl, [centerCont, centerRight, centerLeft]);
+  navigateIn(tl, centerRoot);
 }
 
 export function setVisible(target) {
@@ -86,30 +46,14 @@ export function setVisible(target) {
 }
 
 export function centerOut(url) {
-  let centerCont, centerRight, centerLeft;
-
-  if (isBrowser) {
-    centerCont = document.getElementById("center-container");
-    centerRight = document.getElementById("center-right");
-    centerLeft = document.getElementById("center-left");
-  }
-
+  const centerRoot =
+    typeof window != "undefined" && document.getElementById("center-root");
   const tl = gsap.timeline();
-  navigateOut(tl, [centerCont, centerRight, centerLeft], url);
+  navigateOut(tl, centerRoot, url);
 }
 
 export function centerOn() {
-  let centerCont;
-  let centerRight;
-  let centerLeft;
-  let centerFooter;
-
-  if (isBrowser) {
-    centerCont = document.getElementById("center-container");
-    centerRight = document.getElementById("center-right");
-    centerLeft = document.getElementById("center-left");
-    centerFooter = document.getElementById("center-footer");
-  }
-
-  setVisible([centerCont, centerRight, centerLeft, centerFooter]);
+  const centerRoot =
+    typeof window != "undefined" && document.getElementById("center-root");
+  setVisible(centerRoot);
 }

@@ -59,7 +59,7 @@ exports.createPages = async ({ actions, graphql }) => {
                 ? removeTrailingSlash(allWriting[index - 1].slug)
                 : ""
               : "",
-          previousPost:
+          prevPost:
             index > -1
               ? index < last
                 ? removeTrailingSlash(allWriting[index + 1].slug)

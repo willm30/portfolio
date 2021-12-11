@@ -10,10 +10,12 @@ export default function Group({
   titles: string[];
   pathname: string;
 }) {
+  const id = `${left ? "left" : "right"}-group`;
+  const items = left ? "" : "md:items-end";
   return (
     <div
-      id={`${left ? "left" : "right"}-group`}
-      className={` flex flex-col justify-end ${left ? "" : "items-end"}`}
+      id={id}
+      className={`flex flex-col items-stretch md:justify-end ${items} h-full w-1/2 md:w-auto`}
     >
       {titles.map((t) => (
         <Heading title={t} pathname={pathname} key={t} />

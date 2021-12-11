@@ -7,7 +7,11 @@ import Thumbnail from "./thumbnail";
 import { borderDark, fontBase } from "../../../../styles/common";
 import { getOrder, isVideoThumbnail } from "../../../../utilities/images";
 
-export default function ScreenShotTemplate({ video, imgFull, imgThumbnail }) {
+export default function ScreenShotTemplate({
+  videoLink,
+  imgFull,
+  imgThumbnail,
+}) {
   const [displayModal, setDisplayModal] = useState(false);
   const [thumbnailIndex, setThumbnailIndex] = useState(1);
   function handleOpenModal(index) {
@@ -19,14 +23,18 @@ export default function ScreenShotTemplate({ video, imgFull, imgThumbnail }) {
     setThumbnailIndex(index);
   }
 
+  const short = typeof window != "undefined" && window.innerHeight < 600;
+
   return (
     <>
-      <div className="hidden md:flex flex-col items-stretch translate-x-4">
+      <div className={`flex flex-col items-stretch`}>
         <BaseButton onClick={() => setDisplayModal(true)}>
           Open Gallery
         </BaseButton>
         <div
-          className={`${fontBase} outline-screenshot border-2 rounded-sm ${borderDark}`}
+          className={`hidden ${
+            short ? "" : "md:block"
+          } ${fontBase} outline-screenshot border-2 rounded-sm ${borderDark}`}
         >
           {imgThumbnail.nodes.map((img) => {
             const index = getOrder(img);
@@ -46,7 +54,7 @@ export default function ScreenShotTemplate({ video, imgFull, imgThumbnail }) {
         <Portal>
           <ImageGallery
             images={imgFull.nodes}
-            video={video}
+            videoLink={videoLink}
             setModalDisplay={setDisplayModal}
             thumbnailIndex={thumbnailIndex}
           />

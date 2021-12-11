@@ -10,10 +10,12 @@ export const FirstRenderProvider = ({ children }) => {
 
   function updateFirstRender(defaultValue) {
     const [firstRender, setFirstRender] = useState(defaultValue);
+
     function handleSetFirstRender() {
       setFirstRender(false);
       if (isBrowser) window.sessionStorage.setItem("isFirstRender", "false");
     }
+
     return [firstRender, handleSetFirstRender];
   }
 

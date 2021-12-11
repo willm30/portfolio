@@ -1,52 +1,79 @@
 import React from "react";
-import { bgDark } from "../../styles/common";
-import Group from "../nav/group";
+import { bgDark, fontBase, textBase, textLight } from "../../styles/common";
 import Seo from "../seo/seo";
-import Initial from "../nav/initial";
-import HomeButton from "../nav/home";
+import Sidepiece from "./sidepiece";
+import CentrePiece from "./center/centrepiece";
+import { PageProps } from "gatsby";
+import FooterTemplate from "./center/content/footer/footer";
+import HomeButton from "./mobile/home";
+import Group from "../nav/group";
 
 export default function Scaffold({
-  children,
   location,
   title,
+  data,
+  pageContext,
 }: {
-  children: JSX.Element | JSX.Element[];
-  location: any;
+  location: PageProps["location"];
+  data: PageProps["data"];
+  pageContext: any;
   title: string;
 }) {
   const { pathname } = location;
+  const isMobile = typeof window != "undefined" && window.innerWidth < 768;
 
   const styles = {
     desktop: {
-      cont: `h-screen w-full grid md:grid-cols-scaffold grid-rows-3 md:grid-rows-1 overflow-hidden ${bgDark}`,
-      left: "md:col-start-1 md:col-end-2 md:row-start-1 md:grid md:grid-cols-1 md:grid-rows-w",
-      center: "md:col-start-2 md:col-end-3 md:row-start-1 md:grid-rows-centre",
-      right:
-        "md:col-start-3 md:col-end-4 md:row-start-1 md:grid md:grid-cols-1 md:grid-rows-w",
+      root: "md:justify-between md:overflow-hidden md:flex md:flex-row",
+      centerRoot:
+        "md:grid-cols-center md:grid-rows-center md:h-full md:max-h-screen",
     },
     mobile: {
-      cont: "grid-cols-2",
-      left: "row-start-3 row-end-4 col-start-1 col-end-2 flex flex-col justify-end",
-      center:
-        "col-start-1 col-end-3 row-start-1 row-end-3 grid grid-cols-1 grid-rows-mobCenter",
-      right:
-        "row-start-3 row-end-4 col-start-2 col-end-3 flex flex-col justify-end",
+      root: "overflow-y-scroll grid grid-cols-1 grid-rows-mobScaffold ",
+      centerRoot:
+        "col-start-1 col-end-2 row-start-2 row-end-3 min-h-[75vh] grid-cols-1 grid-rows-mobCenter",
     },
   };
+
   return (
-    <div className={`${styles.desktop.cont} ${styles.mobile.cont}`}>
+    <div
+      className={`h-screen w-screen ${bgDark} ${textLight} ${textBase} ${fontBase} ${styles.desktop.root} ${styles.mobile.root}`}
+    >
       <Seo title={title} />
-      <div className={`${styles.desktop.left} ${styles.mobile.left}`}>
-        <Initial initial="W" location={location} />
-        <Group left={true} titles={["Work", "Writing"]} pathname={pathname} />
+      <HomeButton location={location} />
+      {!isMobile && (
+        <div className={`flex flex-col h-full md:w-auto w-1/2`}>
+          <Sidepiece
+            pathname={pathname}
+            titles={["Work", "Writing"]}
+            left={true}
+          />
+        </div>
+      )}
+      <div
+        id="center-root"
+        className={`invisible grid ${styles.desktop.centerRoot} ${styles.mobile.centerRoot}`}
+      >
+        <CentrePiece {...{ data, location, pageContext }} />
       </div>
-      <div className={`${styles.desktop.center} ${styles.mobile.center}`}>
-        <HomeButton location={location} />
-        {children}
-      </div>
-      <div className={`${styles.desktop.right} ${styles.mobile.right}`}>
-        <Initial initial="M" location={location} />
-        <Group left={false} titles={["Mail", "More"]} pathname={pathname} />
+      <div className="flex md:flex-col md:w-auto w-full col-start-1 col-end-2 row-start-3 row-end-4 h-[25vh] md:h-full">
+        {isMobile && (
+          <>
+            <Group
+              pathname={pathname}
+              titles={["Work", "Writing"]}
+              left={true}
+            />
+            <Group pathname={pathname} titles={["Mail", "More"]} left={false} />
+          </>
+        )}
+        {!isMobile && (
+          <Sidepiece
+            pathname={pathname}
+            titles={["Mail", "More"]}
+            left={false}
+          />
+        )}
       </div>
     </div>
   );

@@ -3,31 +3,28 @@ import {
   bgLight,
   borderLight,
   highlight,
-  invertBaseColorsHover,
-  scrollDefault,
   textDark,
-  textSm,
 } from "../../../styles/common";
-import { useOverflowEffect } from "../../../utilities/hooks/checkOverflow";
 import TableEntry from "./tableEntry";
 
 export default function TOC({ items }) {
-  const [hasOverflowed, setHasOverflowed] = useState(false);
   const [intersecting, setIntersecting] = useState();
   const isBrowser = typeof window != "undefined";
   const container = useRef();
-  useOverflowEffect(container, setHasOverflowed);
 
   useEffect(() => {
+    const notMobile = document.getElementById("center-container");
+    const mobile = document.getElementById("center-root");
+
     const options = {
-      root: document.getElementById("center-container"),
-      rootMargin: "0px 0px -30% 0px",
+      root: window.innerWidth < 768 ? mobile : notMobile,
+      rootMargin: `0px 0px -30% 0px`,
       threshold: 1.0,
     };
 
     const callback = (entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting && isBrowser) {
+        if (entry.isIntersecting) {
           history.pushState(null, document.title, `#${entry.target.id}`);
           setIntersecting(entry); // forces re-render
         }
@@ -45,9 +42,7 @@ export default function TOC({ items }) {
   return (
     <div
       ref={container}
-      className={`${borderLight} border-2 -translate-x-4 flex flex-col justify-center items-center ${
-        hasOverflowed ? "overflow-y-scroll" : ""
-      } ${scrollDefault}`}
+      className={`hidden ${borderLight} border-2 md:flex flex-col justify-center items-center`}
     >
       <h2 className={`${bgLight} ${textDark} mt-4`}>Contents</h2>
       <ul>
