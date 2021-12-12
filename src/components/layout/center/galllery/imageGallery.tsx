@@ -33,6 +33,7 @@ export default function ImageGallery({
   const [selectedIndex, setSelectIndex] = useState(thumbnailIndex);
   const galRef = useRef();
   const modalCont = useRef();
+  const isMobile = typeof window != "undefined" && innerWidth < 768;
 
   function handleImageSelect(order: number) {
     setSelectIndex(order);
@@ -78,19 +79,29 @@ export default function ImageGallery({
       />
       <div
         id="modal-center"
-        className="relative md:col-start-2 md:col-end-3 flex flex-col justify-center"
+        ref={galRef}
+        className="invisible relative md:col-start-2 md:col-end-3 flex flex-col justify-center"
       >
-        <div
-          id="gallery-cont"
-          ref={galRef}
-          className={`invisible ${bgDark} ${borderLight} border-4 grid grid-rows-modal grid-cols-1 min-h-[85%] overflow-y-scroll`}
-        >
+        {!isMobile && (
           <button
-            className="absolute top-2 right-2 md:top-0 md:-right-10"
+            className="absolute top-2 right-2 md:-right-10"
             onClick={handleClose}
           >
             <Cross className={`fill-current ${textLight}`} />
           </button>
+        )}
+        <div
+          id="gallery-cont"
+          className={`${bgDark} ${borderLight} border-4 grid grid-rows-modal grid-cols-1 min-h-[85%] overflow-y-scroll md:overflow-y-hidden`}
+        >
+          {isMobile && (
+            <button
+              className="absolute top-2 right-2 md:top-0 md:-right-10"
+              onClick={handleClose}
+            >
+              <Cross className={`fill-current ${textLight}`} />
+            </button>
+          )}
           <div className="row-start-1 row-end-2 p-4">
             <div
               className={`h-full flex justify-center items-center ${fontAlt} ${textLight}`}
