@@ -17,8 +17,6 @@ import { TabNavigationContext } from "../../context/tabNavigation";
 import { useEffect } from "react";
 import WaitingSpinner from "../../icons/waiting-spinner";
 import { areFontsReady } from "../../utilities/fonts";
-import Home from "../../icons/home";
-import NavigateButton from "../buttons/navigate";
 
 export default function Scaffold({
   location,
@@ -46,11 +44,17 @@ export default function Scaffold({
   const [isTabNavigation, setIsTabNavigation] =
     useContext(TabNavigationContext);
   const fontsLoaded = isBrowser && window.sessionStorage.getItem("fontsLoaded");
-  const [, setHaveFontsLoaded] = useState();
+  const [fontsHaveLoaded, setFontsHaveLoaded] = useState(fontsLoaded);
+  console.log(
+    fontsLoaded,
+    "fonts in session storage",
+    fontsHaveLoaded,
+    "fonts in state"
+  );
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
-    !fontsLoaded && areFontsReady(setHaveFontsLoaded, true);
+    !fontsHaveLoaded && areFontsReady(setFontsHaveLoaded, true);
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -61,7 +65,7 @@ export default function Scaffold({
   }
 
   useLayoutEffect(() => {
-    if (fontsLoaded) {
+    if (fontsHaveLoaded) {
       const prefersReducedMotion =
         isBrowser &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -84,17 +88,15 @@ export default function Scaffold({
         centerOn();
       }
     }
-  }, [fontsLoaded]);
+  }, [fontsHaveLoaded]);
 
   return (
-    <div
-      className={`grid grid-cols-rootGrid md:grid-cols-rootGridLg grid-rows-rootGrid md:grid-rows-rootGridLg h-screen w-screen ${bgDark} ${textLight} ${textBase} ${fontBase} overflow-y-scroll md:overflow-hidden`}
-    >
+    <>
       <Seo title={title} />
-      {!fontsLoaded ? (
+      {!fontsHaveLoaded ? (
         <div
           className={`${
-            fontsLoaded ? "hidden" : "flex"
+            fontsHaveLoaded ? "hidden" : "flex"
           } col-span-full row-span-full justify-center items-center`}
         >
           <WaitingSpinner
@@ -102,15 +104,10 @@ export default function Scaffold({
           />
         </div>
       ) : (
-        <>
-          <div
-            id="home-button"
-            className={`md:hidden col-start-1 col-end-2 row-start-1 row-end-2 self-center m-4 flex items-center min-h-[50px]`}
-          >
-            <NavigateButton url="/" pathname={pathname} className="">
-              <Home className={`fill-current ${textLight}`} />
-            </NavigateButton>
-          </div>
+        <div
+          className={`grid grid-cols-rootGrid md:grid-cols-rootGridLg grid-rows-rootGrid md:grid-rows-rootGridLg h-screen w-screen ${bgDark} ${textLight} ${textBase} ${fontBase} overflow-y-scroll md:overflow-hidden`}
+        >
+          <HomeButton location={location} />
           <div
             className={`col-start-2 col-end-3 row-start-1 row-end-2 md:self-center mx-2 md:mx-4 md:w-auto md:py-4 md:col-start-1 md:col-end-4 md:row-start-1 md:row-end-2 flex items-center md:items-stretch justify-end md:justify-between`}
           >
@@ -148,9 +145,9 @@ export default function Scaffold({
           />
           <Group pathname={pathname} titles={["Work", "Writing"]} left={true} />
           <Group pathname={pathname} titles={["Mail", "More"]} left={false} />
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 }
 
