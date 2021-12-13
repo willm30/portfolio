@@ -15,6 +15,8 @@ import { runOpeningAnimation } from "../../animations/opening";
 import { centerIn, centerOn } from "../../animations/tabClick";
 import { TabNavigationContext } from "../../context/tabNavigation";
 import { useEffect } from "react";
+import WaitingSpinner from "../../icons/waiting-spinner";
+import { areFontsReady } from "../../utilities/fonts";
 
 export default function Scaffold({
   location,
@@ -41,9 +43,12 @@ export default function Scaffold({
     isBrowser && window.sessionStorage.getItem("isOpeningComplete");
   const [isTabNavigation, setIsTabNavigation] =
     useContext(TabNavigationContext);
+  const fontsLoaded = isBrowser && window.sessionStorage.getItem("fontsLoaded");
+  const [, setHaveFontsLoaded] = useState();
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
+    !fontsLoaded && areFontsReady(setHaveFontsLoaded, true);
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -54,71 +59,88 @@ export default function Scaffold({
   }
 
   useLayoutEffect(() => {
-    const prefersReducedMotion =
-      isBrowser &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (fontsLoaded) {
+      const prefersReducedMotion =
+        isBrowser &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (!prefersReducedMotion) {
-      if (!openingComplete && pathname == "/") {
-        runOpeningAnimation();
-        window.sessionStorage.setItem("isOpeningComplete", "true");
-        setOpeningComplete(true);
-      } else {
-        if (isTabNavigation) {
-          centerIn();
-          setIsTabNavigation(false);
+      if (!prefersReducedMotion) {
+        if (!openingComplete && pathname == "/") {
+          console.log("runn opening");
+          runOpeningAnimation();
+          window.sessionStorage.setItem("isOpeningComplete", "true");
+          setOpeningComplete(true);
         } else {
-          centerOn();
+          if (isTabNavigation) {
+            centerIn();
+            setIsTabNavigation(false);
+          } else {
+            centerOn();
+          }
         }
+      } else {
+        centerOn();
       }
-    } else {
-      centerOn();
     }
-  }, []);
+  }, [fontsLoaded]);
 
   return (
     <div
       className={`grid grid-cols-rootGrid md:grid-cols-rootGridLg grid-rows-rootGrid md:grid-rows-rootGridLg h-screen w-screen ${bgDark} ${textLight} ${textBase} ${fontBase} overflow-y-scroll md:overflow-hidden`}
     >
       <Seo title={title} />
-      <HomeButton location={location} />
-      <div
-        className={`col-start-2 col-end-3 row-start-1 row-end-2 md:self-center mx-2 md:mx-4 md:w-auto md:py-4 md:col-start-1 md:col-end-4 md:row-start-1 md:row-end-2 flex items-center md:items-stretch justify-end md:justify-between`}
-      >
-        <Initial initial="W" location={location} />
-        <Initial initial="M" location={location} />
-      </div>
-      {items && !isMobile && <TOC {...{ items }} />}
-      <CenterTemplate {...{ post, pathname }} />
-      {imgRegex && (
+      {!fontsLoaded ? (
         <div
-          id="gal"
-          className="invisible -mt-4 md:ml-4 md:max-w-[200px] row-start-3 row-end-4 justify-self-center md:justify-self-start self-center md:self-start w-full col-start-1 col-end-2 md:col-start-3 md:col-end-4 md:row-start-2 md:row-end-4 h-max flex flex-col justify-center"
+          className={`${
+            fontsLoaded ? "hidden" : "flex"
+          } col-span-full row-span-full justify-center items-center`}
         >
-          {!isMobile && (
-            <BaseButton
-              onClick={() => setDisplayModal(true)}
-              className="mx-2 md:mx-0"
-            >
-              Open Gallery
-            </BaseButton>
-          )}
-          <ScreenShotTemplate
-            {...{
-              videoLink,
-              imgFull,
-              imgThumbnail,
-              displayModal,
-              setDisplayModal,
-            }}
+          <WaitingSpinner
+            className={`animate-spin mx-2 ${textLight} fill-current`}
           />
         </div>
+      ) : (
+        <>
+          <HomeButton location={location} />
+          <div
+            className={`col-start-2 col-end-3 row-start-1 row-end-2 md:self-center mx-2 md:mx-4 md:w-auto md:py-4 md:col-start-1 md:col-end-4 md:row-start-1 md:row-end-2 flex items-center md:items-stretch justify-end md:justify-between`}
+          >
+            <Initial initial="W" location={location} />
+            <Initial initial="M" location={location} />
+          </div>
+          {items && !isMobile && <TOC {...{ items }} />}
+          <CenterTemplate {...{ post, pathname }} />
+          {imgRegex && (
+            <div
+              id="gal"
+              className="invisible -mt-4 md:ml-4 md:max-w-[200px] row-start-3 row-end-4 justify-self-center md:justify-self-start self-center md:self-start w-full col-start-1 col-end-2 md:col-start-3 md:col-end-4 md:row-start-2 md:row-end-4 h-max flex flex-col justify-center"
+            >
+              {!isMobile && (
+                <BaseButton
+                  onClick={() => setDisplayModal(true)}
+                  className="mx-2 md:mx-0"
+                >
+                  Open Gallery
+                </BaseButton>
+              )}
+              <ScreenShotTemplate
+                {...{
+                  videoLink,
+                  imgFull,
+                  imgThumbnail,
+                  displayModal,
+                  setDisplayModal,
+                }}
+              />
+            </div>
+          )}
+          <FooterTemplate
+            {...{ prevPost, nextPost, pathname, imgRegex, setDisplayModal }}
+          />
+          <Group pathname={pathname} titles={["Work", "Writing"]} left={true} />
+          <Group pathname={pathname} titles={["Mail", "More"]} left={false} />
+        </>
       )}
-      <FooterTemplate
-        {...{ prevPost, nextPost, pathname, imgRegex, setDisplayModal }}
-      />
-      <Group pathname={pathname} titles={["Work", "Writing"]} left={true} />
-      <Group pathname={pathname} titles={["Mail", "More"]} left={false} />
     </div>
   );
 }

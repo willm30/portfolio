@@ -1,6 +1,5 @@
 import { graphql, PageProps } from "gatsby";
 import React, { useState } from "react";
-import ScaffoldMobile from "../components/layout/mobile/scaffoldMobile";
 import Scaffold from "../components/layout/scaffold";
 import WaitingPage from "./waitingPage";
 export default function PageTemplate({
@@ -18,15 +17,14 @@ export default function PageTemplate({
   const [, setHaveFontsLoaded] = useState();
   const isMobile = isBrowser && window.innerWidth < 768;
 
-  return fontsLoaded ? (
+  console.log("pageTemplate");
+  return (
     <Scaffold
       location={location}
       title={frontmatter.metaTitle}
       data={data}
       pageContext={pageContext}
     />
-  ) : (
-    <WaitingPage {...{ setHaveFontsLoaded }} />
   );
 }
 
