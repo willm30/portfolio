@@ -86,57 +86,63 @@ export default function Scaffold({
 
   return (
     <div
-      className={`grid grid-cols-rootGrid md:grid-cols-rootGridLg grid-rows-rootGrid md:grid-rows-rootGridLg h-screen w-screen ${bgDark} ${textLight} ${textBase} ${fontBase} overflow-y-scroll md:overflow-hidden`}
+      className={`${bgDark} ${textLight} ${textBase} ${fontBase} w-screen h-screen`}
     >
-      <Seo title={title} />
-      {!haveFontsLoaded && (
+      <div
+        className={`${
+          haveFontsLoaded ? "hidden" : "flex"
+        } h-screen w-screen flex justify-center items-center z-0`}
+      >
         <WaitingSpinner
           className={`animate-spin mx-2 ${textLight} fill-current`}
         />
-      )}
-      {haveFontsLoaded && (
-        <>
-          <HomeButton location={location} />
+      </div>
+      <div
+        className={`${
+          haveFontsLoaded ? "grid" : "hidden"
+        } z-10 grid-cols-rootGrid md:grid-cols-rootGridLg grid-rows-rootGrid md:grid-rows-rootGridLg h-screen w-screen overflow-y-scroll md:overflow-hidden`}
+      >
+        <Seo title={title} />
+        <HomeButton location={location} />
+        <div
+          id="initials"
+          className={`col-start-2 col-end-3 row-start-1 row-end-2 md:self-center mx-2 md:mx-4 md:w-auto md:py-4 md:col-start-1 md:col-end-4 md:row-start-1 md:row-end-2 flex items-center md:items-stretch justify-end md:justify-between`}
+        >
+          <Initial initial="W" location={location} />
+          <Initial initial="M" location={location} />
+        </div>
+        {items && !isMobile && <TOC {...{ items }} />}
+        <CenterTemplate {...{ post, pathname }} />
+        {imgRegex && (
           <div
-            id="initials"
-            className={`col-start-2 col-end-3 row-start-1 row-end-2 md:self-center mx-2 md:mx-4 md:w-auto md:py-4 md:col-start-1 md:col-end-4 md:row-start-1 md:row-end-2 flex items-center md:items-stretch justify-end md:justify-between`}
+            id="gal"
+            className="invisible -mt-4 md:ml-4 md:max-w-[200px] row-start-3 row-end-4 justify-self-center md:justify-self-start self-center md:self-start w-full col-start-1 col-end-2 md:col-start-3 md:col-end-4 md:row-start-2 md:row-end-4 h-max flex flex-col justify-center"
           >
-            <Initial initial="W" location={location} />
-            <Initial initial="M" location={location} />
+            {!isMobile && (
+              <BaseButton
+                onClick={() => setDisplayModal(true)}
+                className="mx-2 md:mx-0"
+              >
+                Open Gallery
+              </BaseButton>
+            )}
+            <ScreenShotTemplate
+              {...{
+                videoLink,
+                imgFull,
+                imgThumbnail,
+                displayModal,
+                setDisplayModal,
+              }}
+            />
           </div>
-          {items && !isMobile && <TOC {...{ items }} />}
-          <CenterTemplate {...{ post, pathname }} />
-          {imgRegex && (
-            <div
-              id="gal"
-              className="invisible -mt-4 md:ml-4 md:max-w-[200px] row-start-3 row-end-4 justify-self-center md:justify-self-start self-center md:self-start w-full col-start-1 col-end-2 md:col-start-3 md:col-end-4 md:row-start-2 md:row-end-4 h-max flex flex-col justify-center"
-            >
-              {!isMobile && (
-                <BaseButton
-                  onClick={() => setDisplayModal(true)}
-                  className="mx-2 md:mx-0"
-                >
-                  Open Gallery
-                </BaseButton>
-              )}
-              <ScreenShotTemplate
-                {...{
-                  videoLink,
-                  imgFull,
-                  imgThumbnail,
-                  displayModal,
-                  setDisplayModal,
-                }}
-              />
-            </div>
-          )}
-          <FooterTemplate
-            {...{ prevPost, nextPost, pathname, imgRegex, setDisplayModal }}
-          />
-          <Group pathname={pathname} titles={["Work", "Writing"]} left={true} />
-          <Group pathname={pathname} titles={["Mail", "More"]} left={false} />
-        </>
-      )}
+        )}
+        <FooterTemplate
+          {...{ prevPost, nextPost, pathname, imgRegex, setDisplayModal }}
+        />
+        <Group pathname={pathname} titles={["Work", "Writing"]} left={true} />
+        <Group pathname={pathname} titles={["Mail", "More"]} left={false} />
+      </div>
     </div>
   );
 }
