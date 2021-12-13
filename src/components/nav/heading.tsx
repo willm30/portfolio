@@ -11,9 +11,11 @@ import NavigateButton from "../buttons/navigate";
 export default function Heading({
   title,
   pathname,
+  linkClass,
 }: {
   title: string;
   pathname: string;
+  linkClass: string;
 }) {
   const style = pathname.includes(title.toLowerCase())
     ? `${textLight} ${bgDark} ${borderLight} border-2 py-2 px-4`
@@ -24,25 +26,20 @@ export default function Heading({
   const mobile = isBrowser && window.innerWidth < 787;
 
   return (
-    <div
-      className={`md:w-min my-4 rounded-sm ${style} text-center mx-2 md:mx-0`}
+    <NavigateButton
+      url={`/${title.toLowerCase()}`}
+      pathname={pathname}
+      className={`md:h-20 md:flex md:justify-center md:items-center md:w-min my-2 md:my-4 rounded-sm ${style} text-center mx-2 md:mx-0`}
+      linkClass={linkClass}
     >
-      <NavigateButton
-        url={`/${title.toLowerCase()}`}
-        pathname={pathname}
-        className="md:h-16 md:flex md:justify-center md:items-center"
+      <span
+        className={`${fontAlt}`}
+        style={{
+          fontSize: "clamp(1rem, 4vw, 3rem)",
+        }}
       >
-        <span
-          className={`${fontAlt}`}
-          style={{
-            fontSize: `${
-              short || mobile ? "1.3rem" : "clamp(2rem, 4vw, 3rem)"
-            }`,
-          }}
-        >
-          {title}
-        </span>
-      </NavigateButton>
-    </div>
+        {title}
+      </span>
+    </NavigateButton>
   );
 }

@@ -15,8 +15,12 @@ module.exports = {
         centre2L: "1fr 5fr 0.5fr",
         centre2R: "0.5fr 5fr 1fr",
         modal: "1fr 4fr 1fr",
+        rootGrid: "1fr 1fr",
+        rootGridLg: "1fr minmax(auto, 785px) 1fr",
       },
       gridTemplateRows: {
+        rootGrid: "auto 1fr auto minmax(auto, 20%)",
+        rootGridLg: "auto 1fr auto minmax(50px, auto)",
         mobScaffold: "1fr 6fr 1fr",
         mobCenter: "5fr 1fr",
         center: "minmax(auto, 5fr) 80px",

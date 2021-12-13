@@ -39,10 +39,12 @@ export default function TOC({ items }) {
     setIntersecting(url);
   }
 
+  const placement = "md:col-start-1 md:col-end-2 md:row-start-2 md:row-end-3";
   return (
     <div
+      id="toc"
       ref={container}
-      className={`hidden ${borderLight} border-2 md:flex flex-col justify-center items-center`}
+      className={`hidden invisible max-w-[200px] md:mr-4 md:justify-self-end md:h-max ${placement} ${borderLight} border-2 md:flex flex-col justify-center items-center`}
     >
       <h2 className={`${bgLight} ${textDark} mt-4`}>Contents</h2>
       <ul>

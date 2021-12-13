@@ -32,10 +32,13 @@ export function navigateIn(tl, target) {
 }
 
 export function centerIn() {
-  const centerRoot =
-    typeof window != "undefined" && document.getElementById("center-root");
+  const centerRoot = document.getElementById("center-container");
+  const footer = document.getElementById("controls");
+  const toc = document.getElementById("toc");
+  const gal = document.getElementById("gal");
   const tl = gsap.timeline();
-  navigateIn(tl, centerRoot);
+  const center = [centerRoot, footer, toc, gal];
+  navigateIn(tl, center);
 }
 
 export function setVisible(target) {
@@ -46,14 +49,21 @@ export function setVisible(target) {
 }
 
 export function centerOut(url) {
-  const centerRoot =
-    typeof window != "undefined" && document.getElementById("center-root");
+  const centerRoot = document.getElementById("center-container");
+  const footer = document.getElementById("controls");
+  const toc = document.getElementById("toc");
+  const gal = document.getElementById("gal");
+  const center = [centerRoot, footer, toc, gal];
+
   const tl = gsap.timeline();
-  navigateOut(tl, centerRoot, url);
+  navigateOut(tl, center, url);
 }
 
 export function centerOn() {
-  const centerRoot =
-    typeof window != "undefined" && document.getElementById("center-root");
-  setVisible(centerRoot);
+  const centerRoot = document.getElementById("center-container");
+  const footer = document.getElementById("controls");
+  const toc = document.getElementById("toc");
+  const gal = document.getElementById("gal");
+  const center = [centerRoot, footer, toc, gal];
+  setVisible(center);
 }

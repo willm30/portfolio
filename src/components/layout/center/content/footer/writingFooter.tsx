@@ -10,12 +10,13 @@ export default function WritingFooter({ prevPost, nextPost, pathname }) {
     : "Previous Post";
   const right = isMobile ? "" : "Next Post";
   return (
-    <>
+    <div className="flex w-1/2 flex-auto flex-shrink-0 md:justify-between">
       {prevPost && (
         <NextPost
           url={`/${prevPost}`}
           pathname={pathname}
-          className="flex justify-center items-center w-full md:w-auto"
+          className="w-full md:w-auto"
+          linkClass="md:mx-0 mx-2"
         >
           &larr; {left}
         </NextPost>
@@ -24,11 +25,12 @@ export default function WritingFooter({ prevPost, nextPost, pathname }) {
         <NextPost
           url={`/${nextPost}`}
           pathname={pathname}
-          className="flex justify-center items-center w-full md:w-auto"
+          className="w-full md:w-auto"
+          linkClass="md:mx-0 mx-2"
         >
           {right} &rarr;
         </NextPost>
       )}
-    </>
+    </div>
   );
 }

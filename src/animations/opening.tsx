@@ -9,13 +9,15 @@ function openingAnimation() {
   const right = document.getElementById("right-group");
   const x = 2.5;
   tl.set(W, {
-    x: function () {
-      return window.innerWidth / x;
+    x: function (_, target) {
+      const width = target.getBoundingClientRect().width + 20;
+      return window.innerWidth / 2 - width;
     },
   })
     .set(M, {
-      x: function () {
-        return -(window.innerWidth / x);
+      x: function (_, target) {
+        const width = target.getBoundingClientRect().width + 20;
+        return -(window.innerWidth / 2 - width);
       },
     })
     .set(left, {
@@ -49,6 +51,7 @@ function openingAnimation() {
 }
 
 function openingAnimationMobile() {
+  console.log("oen mobile");
   const tl = gsap.timeline();
   const left = document.getElementById("left-group");
   const right = document.getElementById("right-group");

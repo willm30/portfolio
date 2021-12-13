@@ -10,14 +10,19 @@ export default function Initial({ initial, location }) {
     <NavigateButton
       url="/"
       pathname={pathname}
-      className="hidden md:flex flex-col md:h-[30vh] md:justify-center md:items-center md:w-full"
+      className="flex flex-col justify-center items-center md:w-full"
     >
       <div
         id={`${initial}-initial`}
-        className={`mt-8 ${textLight} ${fontBold}`}
-        style={{ fontSize: `${short ? "3.5rem" : "clamp(4rem, 10vw, 6rem)"}` }}
+        className={`mt-2 md:mt-8 ${textLight} ${fontBold}`}
       >
-        {initial}
+        <span
+          style={{
+            fontSize: "clamp(2rem, 10vw, 6rem)",
+          }}
+        >
+          {initial}
+        </span>
       </div>
     </NavigateButton>
   );

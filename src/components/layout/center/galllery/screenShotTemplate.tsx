@@ -1,6 +1,5 @@
 import { getImage } from "gatsby-plugin-image";
 import React, { useState } from "react";
-import BaseButton from "../../../buttons/base";
 import Portal from "../../../portal/portal";
 import ImageGallery from "./imageGallery";
 import Thumbnail from "./thumbnail";
@@ -11,8 +10,9 @@ export default function ScreenShotTemplate({
   videoLink,
   imgFull,
   imgThumbnail,
+  displayModal,
+  setDisplayModal,
 }) {
-  const [displayModal, setDisplayModal] = useState(false);
   const [thumbnailIndex, setThumbnailIndex] = useState(1);
   function handleOpenModal(index) {
     setDisplayModal(true);
@@ -24,30 +24,26 @@ export default function ScreenShotTemplate({
   }
 
   const short = typeof window != "undefined" && window.innerHeight < 600;
-
+  const placement =
+    "md:col-start-3 md:col-end-4 md:row-start-2 md:row-end-3 md:self-end";
   return (
-    <>
-      <div className={`flex flex-col items-stretch`}>
-        <BaseButton onClick={() => setDisplayModal(true)}>
-          Open Gallery
-        </BaseButton>
-        <div
-          className={`hidden ${
-            short ? "" : "md:block"
-          } ${fontBase} outline-screenshot border-2 rounded-sm ${borderDark}`}
-        >
-          {imgThumbnail.nodes.map((img) => {
-            const index = getOrder(img);
-            return isVideoThumbnail(img) ? null : (
-              <Thumbnail
-                onClick={() => handleOpenModal(index)}
-                image={getImage(img)}
-                className=""
-                key={`screenshot${index}`}
-              />
-            );
-          })}
-        </div>
+    <div className={`hidden md:block ${placement}`}>
+      <div
+        className={`hidden ${
+          short ? "" : "md:block"
+        } ${fontBase} outline-screenshot border-2 rounded-sm ${borderDark}`}
+      >
+        {imgThumbnail.nodes.map((img) => {
+          const index = getOrder(img);
+          return isVideoThumbnail(img) ? null : (
+            <Thumbnail
+              onClick={() => handleOpenModal(index)}
+              image={getImage(img)}
+              className=""
+              key={`screenshot${index}`}
+            />
+          );
+        })}
       </div>
 
       {displayModal ? (
@@ -60,6 +56,6 @@ export default function ScreenShotTemplate({
           />
         </Portal>
       ) : null}
-    </>
+    </div>
   );
 }
