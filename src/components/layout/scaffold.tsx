@@ -17,6 +17,8 @@ import { TabNavigationContext } from "../../context/tabNavigation";
 import { useEffect } from "react";
 import WaitingSpinner from "../../icons/waiting-spinner";
 import { areFontsReady } from "../../utilities/fonts";
+import Home from "../../icons/home";
+import NavigateButton from "../buttons/navigate";
 
 export default function Scaffold({
   location,
@@ -101,7 +103,14 @@ export default function Scaffold({
         </div>
       ) : (
         <>
-          <HomeButton location={location} />
+          <div
+            id="home-button"
+            className={`md:hidden col-start-1 col-end-2 row-start-1 row-end-2 self-center m-4 flex items-center min-h-[50px]`}
+          >
+            <NavigateButton url="/" pathname={pathname} className="">
+              <Home className={`fill-current ${textLight}`} />
+            </NavigateButton>
+          </div>
           <div
             className={`col-start-2 col-end-3 row-start-1 row-end-2 md:self-center mx-2 md:mx-4 md:w-auto md:py-4 md:col-start-1 md:col-end-4 md:row-start-1 md:row-end-2 flex items-center md:items-stretch justify-end md:justify-between`}
           >

@@ -17,7 +17,6 @@ export default function PageTemplate({
   const [, setHaveFontsLoaded] = useState();
   const isMobile = isBrowser && window.innerWidth < 768;
 
-  console.log("pageTemplate");
   return (
     <Scaffold
       location={location}

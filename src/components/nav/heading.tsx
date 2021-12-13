@@ -35,7 +35,7 @@ export default function Heading({
       <span
         className={`${fontAlt}`}
         style={{
-          fontSize: "clamp(1rem, 4vw, 3rem)",
+          fontSize: "clamp(1.3rem, 4vw, 3rem)",
         }}
       >
         {title}
