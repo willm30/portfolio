@@ -1,14 +1,14 @@
 const React = require("react"); // eslint-disable-line
 const tabNavigation = require("./src/context/tabNavigation") // eslint-disable-line
-const firstRender = require("./src/context/firstRender");  // eslint-disable-line 
+const fontsLoaded = require("./src/context/fontsLoaded");  // eslint-disable-line 
 
 const TabNavigationProvider = tabNavigation.TabNavigationProvider;
-const FirstRenderProvider = firstRender.FirstRenderProvider;
+const FontsLoadedProvider = fontsLoaded.FontsLoadedProvider;
 
 exports.wrapRootElement = ({ element }) => {
   return (
-    <FirstRenderProvider>
+    <FontsLoadedProvider>
       <TabNavigationProvider>{element}</TabNavigationProvider>
-    </FirstRenderProvider>
+    </FontsLoadedProvider>
   );
 };

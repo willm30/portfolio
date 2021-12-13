@@ -1,12 +1,12 @@
 import "./src/styles/global.css";
 import React from "react";
 import { TabNavigationProvider } from "./src/context/tabNavigation";
-import { FirstRenderProvider } from "./src/context/firstRender";
+import { FontsLoadedProvider } from "./src/context/fontsLoaded";
 
 export function wrapRootElement({ element }) {
   return (
-    <FirstRenderProvider>
+    <FontsLoadedProvider>
       <TabNavigationProvider>{element}</TabNavigationProvider>{" "}
-    </FirstRenderProvider>
+    </FontsLoadedProvider>
   );
 }

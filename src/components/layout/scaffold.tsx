@@ -17,6 +17,7 @@ import { TabNavigationContext } from "../../context/tabNavigation";
 import { useEffect } from "react";
 import WaitingSpinner from "../../icons/waiting-spinner";
 import { areFontsReady } from "../../utilities/fonts";
+import { FontsLoadedContext } from "../../context/fontsLoaded";
 
 export default function Scaffold({
   location,
@@ -43,9 +44,7 @@ export default function Scaffold({
     isBrowser && window.sessionStorage.getItem("isOpeningComplete");
   const [isTabNavigation, setIsTabNavigation] =
     useContext(TabNavigationContext);
-  const fontsLoaded = isBrowser && window.sessionStorage.getItem("fontsLoaded");
-  const [haveFontsLoaded, setHaveFontsLoaded] = useState(fontsLoaded);
-
+  const [haveFontsLoaded, setHaveFontsLoaded] = useContext(FontsLoadedContext);
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     !haveFontsLoaded && areFontsReady(setHaveFontsLoaded, true);
