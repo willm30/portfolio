@@ -63,7 +63,7 @@ export default function Scaffold({
         isBrowser &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      if (!prefersReducedMotion) {
+      if (!prefersReducedMotion && !isMobile) {
         if (!openingComplete && pathname == "/") {
           console.log("runn");
           runOpeningAnimation();

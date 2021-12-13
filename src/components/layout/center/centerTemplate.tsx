@@ -12,7 +12,7 @@ export default function CenterTemplate({ post, pathname }) {
   return (
     <div
       id="center-container"
-      className={`${placement} invisible flex flex-col justify-center items-center min-h-[500px] md:min-h-0 md:max-h-[695px] ${styles.desktop} ${styles.mobile}`}
+      className={`${placement} px-2 md:px-0 invisible flex flex-col justify-center items-center min-h-[500px] md:min-h-0 md:max-h-[695px] ${styles.desktop} ${styles.mobile}`}
     >
       <ContentTemplate {...{ post, pathname }} />
     </div>

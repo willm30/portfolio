@@ -15,15 +15,12 @@ export default function NavigateButton({
   const isMobile = isBrowser && window.innerWidth < 768;
 
   function handleClick() {
-    let reducedMotion;
-
-    if (isBrowser)
-      reducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
     if (pathname != url) {
-      if (!reducedMotion) {
+      if (!prefersReducedMotion && !isMobile) {
         setIsTabNavigation(true);
         centerOut(url);
       } else {
