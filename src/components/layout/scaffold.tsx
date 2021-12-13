@@ -85,21 +85,17 @@ export default function Scaffold({
   }, [haveFontsLoaded]);
 
   return (
-    <div>
+    <div
+      className={`grid grid-cols-rootGrid md:grid-cols-rootGridLg grid-rows-rootGrid md:grid-rows-rootGridLg h-screen w-screen ${bgDark} ${textLight} ${textBase} ${fontBase} overflow-y-scroll md:overflow-hidden`}
+    >
       <Seo title={title} />
       {!haveFontsLoaded && (
-        <div
-          className={`w-screen h-screen flex justify-center items-center ${bgDark} ${textLight} ${textBase} ${fontBase}`}
-        >
-          <WaitingSpinner
-            className={`animate-spin mx-2 ${textLight} fill-current`}
-          />
-        </div>
+        <WaitingSpinner
+          className={`animate-spin mx-2 ${textLight} fill-current`}
+        />
       )}
       {haveFontsLoaded && (
-        <div
-          className={`grid grid-cols-rootGrid md:grid-cols-rootGridLg grid-rows-rootGrid md:grid-rows-rootGridLg h-screen w-screen ${bgDark} ${textLight} ${textBase} ${fontBase} overflow-y-scroll md:overflow-hidden`}
-        >
+        <>
           <HomeButton location={location} />
           <div
             id="initials"
@@ -139,7 +135,7 @@ export default function Scaffold({
           />
           <Group pathname={pathname} titles={["Work", "Writing"]} left={true} />
           <Group pathname={pathname} titles={["Mail", "More"]} left={false} />
-        </div>
+        </>
       )}
     </div>
   );
