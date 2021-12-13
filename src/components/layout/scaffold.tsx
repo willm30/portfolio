@@ -44,17 +44,11 @@ export default function Scaffold({
   const [isTabNavigation, setIsTabNavigation] =
     useContext(TabNavigationContext);
   const fontsLoaded = isBrowser && window.sessionStorage.getItem("fontsLoaded");
-  const [fontsHaveLoaded, setFontsHaveLoaded] = useState(fontsLoaded);
-  console.log(
-    fontsLoaded,
-    "fonts in session storage",
-    fontsHaveLoaded,
-    "fonts in state"
-  );
+  const [haveFontsLoaded, setHaveFontsLoaded] = useState(fontsLoaded);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
-    !fontsHaveLoaded && areFontsReady(setFontsHaveLoaded, true);
+    !haveFontsLoaded && areFontsReady(setHaveFontsLoaded, true);
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -65,14 +59,14 @@ export default function Scaffold({
   }
 
   useLayoutEffect(() => {
-    if (fontsHaveLoaded) {
+    if (haveFontsLoaded) {
       const prefersReducedMotion =
         isBrowser &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       if (!prefersReducedMotion) {
         if (!openingComplete && pathname == "/") {
-          console.log("runn opening");
+          console.log("runn");
           runOpeningAnimation();
           window.sessionStorage.setItem("isOpeningComplete", "true");
           setOpeningComplete(true);
@@ -88,27 +82,27 @@ export default function Scaffold({
         centerOn();
       }
     }
-  }, [fontsHaveLoaded]);
+  }, [haveFontsLoaded]);
 
   return (
-    <>
+    <div>
       <Seo title={title} />
-      {!fontsHaveLoaded ? (
+      {!haveFontsLoaded && (
         <div
-          className={`${
-            fontsHaveLoaded ? "hidden" : "flex"
-          } col-span-full row-span-full justify-center items-center`}
+          className={`w-screen h-screen flex justify-center items-center ${bgDark} ${textLight} ${textBase} ${fontBase}`}
         >
           <WaitingSpinner
             className={`animate-spin mx-2 ${textLight} fill-current`}
           />
         </div>
-      ) : (
+      )}
+      {haveFontsLoaded && (
         <div
           className={`grid grid-cols-rootGrid md:grid-cols-rootGridLg grid-rows-rootGrid md:grid-rows-rootGridLg h-screen w-screen ${bgDark} ${textLight} ${textBase} ${fontBase} overflow-y-scroll md:overflow-hidden`}
         >
           <HomeButton location={location} />
           <div
+            id="initials"
             className={`col-start-2 col-end-3 row-start-1 row-end-2 md:self-center mx-2 md:mx-4 md:w-auto md:py-4 md:col-start-1 md:col-end-4 md:row-start-1 md:row-end-2 flex items-center md:items-stretch justify-end md:justify-between`}
           >
             <Initial initial="W" location={location} />
@@ -147,7 +141,7 @@ export default function Scaffold({
           <Group pathname={pathname} titles={["Mail", "More"]} left={false} />
         </div>
       )}
-    </>
+    </div>
   );
 }
 

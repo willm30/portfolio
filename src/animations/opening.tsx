@@ -56,14 +56,15 @@ function openingAnimationMobile() {
   const left = document.getElementById("left-group");
   const right = document.getElementById("right-group");
   const home = document.getElementById("home-button");
+  const initials = document.getElementById("initials");
   tl.set([left, home], {
     xPercent: -100,
   })
-    .set(right, {
+    .set([right, initials], {
       xPercent: 100,
     })
     .to(
-      [left, right, home],
+      [left, right, home, initials],
       {
         xPercent: 0,
         duration: 1,
